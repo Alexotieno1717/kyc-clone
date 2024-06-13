@@ -25,7 +25,7 @@ export default function Home() {
   const [amount, setAmount] = useState('');
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [paymentResponse, setPaymentResponse] = useState<any>(null);
+  // const [paymentResponse, setPaymentResponse] = useState<any>(null);
   const [firstName, setFirstName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
 
@@ -76,8 +76,8 @@ export default function Home() {
       }
   
       const data = response.data;
-      console.log(data);
-      setPaymentResponse(data);
+      // console.log(data);
+      // setPaymentResponse(data);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -227,11 +227,11 @@ export default function Home() {
           </div>
         </>
       )}
-      {paymentResponse && (
+      {/* {paymentResponse && (
         <div className="mt-12">
           <pre className="bg-gray-100 p-4 rounded-md">{JSON.stringify(paymentResponse, null, 2)}</pre>
         </div>
-      )}
+      )} */}
     </main>
   );
 }
