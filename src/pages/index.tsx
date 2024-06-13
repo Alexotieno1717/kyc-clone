@@ -65,10 +65,11 @@ export default function Home() {
 
   const handleAmountSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       // const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254748815593&amount=1`
-      const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
+      // const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
 
 
       console.log("api url", apiUrl)
