@@ -2,6 +2,7 @@
 
 import Forms from "@/components/forms/Forms";
 import { Button } from "@/components/ui/button";
+import { ErrorAlert, SuccessAlert } from "@/utils/alerts";
 import axios from "axios";
 import { useState } from "react";
 
@@ -52,8 +53,10 @@ export default function Home() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
+      SuccessAlert("Fetching data...")
+
       const data: ResponseData = await response.json();
-      console.log('API Response:', data);
+      // console.log('API Response:', data);
 
       // Validate the response data
       const formattedDob = formatDate(data.dob);
@@ -81,12 +84,15 @@ export default function Home() {
       if (response.status !== 200) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
+      SuccessAlert()
   
       const data = response.data;
       // console.log(data);
       // setPaymentResponse(data);
     } catch (error) {
       console.error('Error:', error);
+      ErrorAlert("Your Request Failed!!")
     }
   }
 

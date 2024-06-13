@@ -3,6 +3,8 @@ import { Inter as FontSans } from "next/font/google"
 import {cn} from "@/lib/utils";
 import Header from "@/components/Header";
 import '../styles/globals.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const fontSans = FontSans({
@@ -20,6 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
     >
     {/*  Page wrapper start  */}
         <div> 
+            <ToastContainer limit={1} position='top-right' autoClose={5000} />
             {/* Header */}
             <Header />
 
@@ -30,3 +33,4 @@ export default function App({ Component, pageProps }: AppProps) {
     </div>
     );
 }
+
