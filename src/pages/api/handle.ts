@@ -2,11 +2,9 @@ import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-
-
   let data = new FormData();
   data.append('id_number', req.body.idNumber);
-  data.append('first_name', req.body.firstName);
+  data.append('dob', req.body.dob);
 
   let config = {
     method: 'post',

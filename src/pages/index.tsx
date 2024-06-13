@@ -25,10 +25,16 @@ export default function Home() {
   const [amount, setAmount] = useState('');
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  // const [paymentResponse, setPaymentResponse] = useState<any>(null);
-  const [firstName, setFirstName] = useState('');
+  const [dob, setDob] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +45,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ idNumber, firstName }),
+        body: JSON.stringify({ idNumber, dob }),
       });
 
       if (!response.ok) {
@@ -47,11 +53,12 @@ export default function Home() {
       }
 
       const data: ResponseData = await response.json();
-      // console.log('API Response:', data);
+      console.log('API Response:', data);
 
       // Validate the response data
-      if (data.id_number !== idNumber || data.first_name.toLowerCase() !== firstName.toLowerCase()) {
-        setError('The Id Number and First name provided do not match....');
+      const formattedDob = formatDate(data.dob);
+      if (data.id_number !== idNumber || formattedDob !== dob) {
+        setError('The Id Number and Date of Birth provided do not match.');
         setResponseData(null);
       } else {
         setError(null);
@@ -82,62 +89,7 @@ export default function Home() {
       console.error('Error:', error);
     }
   }
-  
 
-  // const handleAmountSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     // const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254748815593&amount=1`
-  //     // const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
-  //     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
-      
-
-
-  //     console.log("api url", apiUrl)
-      
-  
-  //     const response = await axios.get(apiUrl);
-  
-  //     if (response.status !== 200) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  
-  //     const data = response.data;
-  //     console.log(data);
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     // Handle error here
-  //   }
-  // }
-
-
-  // const handleAmountSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await fetch('/api/amount', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ accountNumber, amount }),
-  //     });
-
-  //     if (!response.ok) {
-  //       const errorText = await response.text();
-  //       throw new Error(`HTTP error! Status: ${response.status} - ${errorText}`);
-  //     }
-
-  //     const data = await response.json();
-  //     setPaymentResponse(data);
-  //     setError(null);
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     setError('An error occurred while processing your request.');
-  //     setPaymentResponse(null);
-  //   }
-  // };
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -154,10 +106,10 @@ export default function Home() {
               />
             </div>
             <div>
-                <input 
-                    type="text" 
-                    placeholder="First Name" 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)} 
+            <input 
+                    type="date" 
+                    placeholder="Date of Birth" 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDob(e.target.value)} 
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     required 
                 />
