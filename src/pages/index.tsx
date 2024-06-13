@@ -65,15 +65,9 @@ export default function Home() {
 
   const handleAmountSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      // const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254748815593&amount=1`
-      // const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
-
-
-      console.log("api url", apiUrl)
-      
+      const apiUrl = `/api/proxy-initiate-payment?account_number=${accountNumber}&amount=${amount}`;
+      console.log("api url", apiUrl);
   
       const response = await axios.get(apiUrl);
   
@@ -83,11 +77,39 @@ export default function Home() {
   
       const data = response.data;
       console.log(data);
+      setPaymentResponse(data);
     } catch (error) {
       console.error('Error:', error);
-      // Handle error here
     }
   }
+  
+
+  // const handleAmountSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     // const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254748815593&amount=1`
+  //     // const apiUrl = `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
+  //     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/initiate-payment&account_number=${accountNumber}&amount=${amount}`;
+      
+
+
+  //     console.log("api url", apiUrl)
+      
+  
+  //     const response = await axios.get(apiUrl);
+  
+  //     if (response.status !== 200) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  
+  //     const data = response.data;
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     // Handle error here
+  //   }
+  // }
 
 
   // const handleAmountSubmit = async (e: React.FormEvent) => {
