@@ -3,13 +3,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { account_number, amount } = req.query;
+  const { phone, amount } = req.query;
 
   try {
-    const response = await axios.get(`http://197.248.4.233/mswali/mswali_app/backend/web/index.php`, {
+    const response = await axios.get(`http://165.22.46.7/olive-tree-demos/api/deposit.php`, {
       params: {
-        r: 'api/initiate-payment',
-        account_number,
+        phone,
         amount,
       },
     });

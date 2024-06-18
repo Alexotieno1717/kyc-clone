@@ -53,14 +53,15 @@ export default function Home() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      SuccessAlert("Fetching data...")
+      SuccessAlert("Fetching data...");
 
       const data: ResponseData = await response.json();
       // console.log('API Response:', data);
 
-      // Validate the response data
-      const formattedDob = formatDate(data.dob);
-      if (data.id_number !== idNumber || formattedDob !== dob) {
+      const formattedDob = new Date(dob).toLocaleDateString('en-US');
+      const apiDob = new Date(data.dob).toLocaleDateString('en-US');
+
+      if (data.id_number !== idNumber || apiDob !== formattedDob) {
         setError('The Id Number and Date of Birth provided do not match.');
         setResponseData(null);
       } else {
@@ -76,7 +77,7 @@ export default function Home() {
   const handleAmountSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const apiUrl = `/api/proxy-initiate-payment?account_number=${accountNumber}&amount=${amount}`;
+      const apiUrl = `/api/proxy-initiate-payment?phone=${accountNumber}&amount=${amount}`;
       console.log("api url", apiUrl);
   
       const response = await axios.get(apiUrl);
