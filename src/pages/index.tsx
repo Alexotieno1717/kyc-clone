@@ -1,6 +1,5 @@
 "use client"
 
-import Forms from "@/components/forms/Forms";
 import { Button } from "@/components/ui/button";
 import { ErrorAlert, SuccessAlert } from "@/utils/alerts";
 import axios from "axios";
@@ -19,7 +18,6 @@ interface ResponseData {
   citizenship: string;
   valid: boolean;
 }
-
 
 export default function Home() {
   const [idNumber, setIdNumber] = useState('');
@@ -104,11 +102,10 @@ export default function Home() {
     }
   }
 
-
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
 
-      <form className='py-4 mx-auto max-w-7xl bg-white shadow-md p-8'onSubmit={handleSubmit}>
+      <form className='py-4 mx-auto max-w-full bg-white shadow-md p-8 sm:max-w-6xl'onSubmit={handleSubmit}>
         <div className='space-y-8'>
             <div>
               <input 
@@ -129,7 +126,7 @@ export default function Home() {
                 />
             </div>
         </div>
-        <Button className='mt-4' type="submit">Submit</Button>
+        <Button className='mt-4 w-full' type="submit">Submit</Button>
       </form>
 
       {error && (
@@ -143,7 +140,7 @@ export default function Home() {
           {/* <div className="mt-12">
             <pre className="bg-gray-100 p-4 rounded-md">{JSON.stringify(responseData, null, 2)}</pre>
           </div> */}
-          <div className="mt-12">
+          <div className="mt-12 overflow-x-auto">
             <table className="w-full min-w-max table-auto text-left shadow-md rounded-md divide-y divide-gray-200">
               <thead className="text-lg bg-gray-100 uppercase">
                 <tr>
@@ -167,7 +164,7 @@ export default function Home() {
           </div>
 
           <div className="mt-12">
-          <form className='py-4 mx-auto max-w-7xl bg-white shadow-md p-8' onSubmit={handleAmountSubmit}>
+          <form className='py-4 mx-auto max-w-full bg-white shadow-md p-8 sm:max-w-6xl' onSubmit={handleAmountSubmit}>
             <div className='space-y-8'>
                 <div>
                   <input 
@@ -190,7 +187,7 @@ export default function Home() {
                     />
                 </div>
             </div>
-            <Button className='mt-4' type="submit">Submit</Button>
+            <Button className='mt-4 w-full' type="submit">Submit</Button>
           </form>
           </div>
         </>
@@ -203,6 +200,3 @@ export default function Home() {
     </main>
   );
 }
-
-
-
