@@ -76,8 +76,15 @@ export default function Home() {
 
   const handleAmountSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Convert phone number format from 07... to 2547...
+    let formattedPhoneNumber = accountNumber;
+    if (formattedPhoneNumber.startsWith("07")) {
+      formattedPhoneNumber = "2547" + formattedPhoneNumber.slice(2);
+    }
+
     try {
-      const apiUrl = `/api/proxy-initiate-payment?phone=${accountNumber}&amount=${amount}`;
+      const apiUrl = `/api/proxy-initiate-payment?phone=${formattedPhoneNumber}&amount=${amount}`;
       console.log("api url", apiUrl);
   
       const response = await axios.get(apiUrl);
