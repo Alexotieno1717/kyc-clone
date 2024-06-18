@@ -77,25 +77,8 @@ const Header = () => {
                     <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
 
                         <a href="#"
-                           className="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
-                           aria-current="page">Dashboard</a>
-                        <a href="#"
-                           className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Team</a>
-                        <a href="#"
-                           className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Projects</a>
-                        <a href="#"
-                           className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Calendar</a>
-                        <a href="#"
-                           className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Reports</a>
-                    </div>
-                    <div className="border-t border-gray-70 0 pb-3 pt-4">
-                        <div className="flex items-center px-5">
-                            <div className="flex-shrink-0">
-                                <img className="h-10 w-10 rounded-full"
-                                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                     alt=""/>
-                            </div>
-                        </div>
+                           className="bg-[#206A3F]/70 shadow-lg text-white block rounded-md px-3 py-2 text-base font-medium"
+                           aria-current="page">Home</a>
                     </div>
                 </div>
             </nav>
