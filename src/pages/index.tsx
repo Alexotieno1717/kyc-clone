@@ -53,8 +53,6 @@ export default function Home() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      SuccessAlert("Fetching data...");
-
       const data: ResponseData = await response.json();
       // console.log('API Response:', data);
 
@@ -63,10 +61,12 @@ export default function Home() {
 
       if (data.id_number !== idNumber || apiDob !== formattedDob) {
         setError('The Id Number and Date of Birth provided do not match.');
+        ErrorAlert('The details provide do not much!!');
         setResponseData(null);
       } else {
         setError(null);
         setResponseData(data);
+        SuccessAlert("Fetching data...");
       }
     } catch (error) {
       console.error('Error:', error);
