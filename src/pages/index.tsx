@@ -71,15 +71,18 @@ const Home = () => {
                 <div className="absolute top-6 left-3 w-0.5 h-full bg-gray-300"></div>
                 <ul className="space-y-[100px]">
                   <li className="flex items-center space-x-4 relative z-10">
-                                    <span className="w-6 h-6 rounded-full border-2 flex items-center justify-center border-yellow-300 bg-yellow-300">
-                                        <Check className="w-5 h-5" />
-                                    </span>
+                      <span className="w-6 h-6 rounded-full border-2 flex items-center justify-center border-yellow-300 bg-yellow-300">
+                          <Check className="w-5 h-5" />
+                      </span>
                     <span className="font-bold text-gray-800">User’s Details</span>
                   </li>
-                  <li className="flex items-center space-x-4 relative z-10">
-                                    <span className="w-6 h-6 rounded-full border-2 flex items-center justify-center border-yellow-300 bg-yellow-300">
-                                        <Check className="w-5 h-5" />
-                                    </span>
+                  <li className={`flex items-center space-x-4 relative z-10`}>
+                      <span
+                          // className="w-6 h-6 rounded-full border-2 flex items-center justify-center "
+                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center  ${responseData ? 'border-yellow-300 bg-yellow-300' : 'border-black bg-black'}`}
+                      >
+                          <Check className="w-5 h-5" />
+                      </span>
                     <span className="font-bold text-gray-800">Verify</span>
                   </li>
                 </ul>
@@ -88,12 +91,19 @@ const Home = () => {
           </div>
 
           <div className="col-span-9">
-            <div className="px-12 py-9 mx-auto">
+            <div className="px-10 py-6 mx-auto">
               <div className="flex items-center justify-center mx-auto space-x-2 mb-7 bg-blue-400 rounded-full w-fit">
-                <button className="py-3 px-12 rounded-full transition-colors duration-300 bg-white text-gray-900">
-                  ID & DO
+                <button
+                    // className="py-2 px-8 rounded-full transition-colors duration-300 bg-white text-gray-900"
+                    className={`py-2 px-8 rounded-full transition-colors duration-300 ${responseData === null ? ' bg-white text-gray-900' : ' bg-transparent text-white'}`}
+
+                >
+                  ID Number
                 </button>
-                <button className="py-3 px-12 rounded-full transition-colors duration-300">
+                <button
+                    // className="py-2 px-8 rounded-full transition-colors duration-300"
+                    className={`py-2 px-8 rounded-full transition-colors duration-300 ${responseData ? ' bg-white text-gray-900' : ' bg-transparent text-gray-900'}`}
+                >
                   User Details
                 </button>
               </div>
@@ -108,6 +118,7 @@ const Home = () => {
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIdNumber(e.target.value)}
                       placeholder="Enter your ID Number"
                       className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      required
                   />
                 </div>
                 <Button className="mt-0" type="submit" disabled={loading}>
