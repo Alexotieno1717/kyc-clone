@@ -26,6 +26,7 @@ const Home = () => {
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("idNumber");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +37,7 @@ const Home = () => {
       const data: ResponseData = response.data;
 
       if (data.id_number !== idNumber) {
-        setError('The Id Number and Date of Birth provided do not match.');
+        setError('The Id Number provided was not found.');
         ErrorAlert('The details provided do not match!');
         setResponseData(null);
       } else {
@@ -91,77 +92,122 @@ const Home = () => {
           </div>
 
           <div className="col-span-9">
-            <div className="px-10 py-6 mx-auto">
-              <div className="flex items-center justify-center mx-auto space-x-2 mb-7 bg-blue-400 rounded-full w-fit">
+            <div className="flex justify-center py-4">
+              <div className="flex items-center bg-blue-400 rounded-full">
                 <button
-                    // className="py-2 px-8 rounded-full transition-colors duration-300 bg-white text-gray-900"
-                    className={`py-2 px-8 rounded-full transition-colors duration-300 ${responseData === null ? ' bg-white text-gray-900' : ' bg-transparent text-white'}`}
-
+                    className={`px-6 py-3 rounded-full ${
+                        activeTab === "idNumber"
+                            ? "bg-white text-gray-900"
+                            : "bg-transparent text-white"
+                    }`}
+                    onClick={() => setActiveTab("idNumber")}
                 >
                   ID Number
                 </button>
                 <button
-                    // className="py-2 px-8 rounded-full transition-colors duration-300"
-                    className={`py-2 px-8 rounded-full transition-colors duration-300 ${responseData ? ' bg-white text-gray-900' : ' bg-transparent text-gray-900'}`}
+                    className={`px-6 py-3 rounded-full ${
+                        activeTab === "userDetails"
+                            ? "bg-white text-gray-900"
+                            : "bg-transparent text-white"
+                    }`}
+                    onClick={() => setActiveTab("userDetails")}
                 >
                   User Details
                 </button>
               </div>
             </div>
 
-            <main className='max-w-4xl'>
-              <form onSubmit={handleSubmit} className="flex items-center space-x-4">
-                <div className="flex-grow">
-                  <input
-                      type="number"
-                      min={0}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIdNumber(e.target.value)}
-                      placeholder="Enter your ID Number"
-                      className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
-                      required
-                  />
-                </div>
-                <Button className="mt-0" type="submit" disabled={loading}>
-                  {loading ? 'Loading...' : 'Search'}
-                </Button>
-              </form>
+            <div className="">
+              {activeTab === "idNumber" && (
+                  <main className='max-w-2xl'>
+                    <form onSubmit={handleSubmit} className="max-w-2xl flex items-center space-x-4">
+                      <div className="flex-grow">
+                        <input
+                            type="number"
+                            min={0}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIdNumber(e.target.value)}
+                            placeholder="Enter your ID Number"
+                            className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            required
+                        />
+                      </div>
+                      <Button className="mt-0" type="submit" disabled={loading}>
+                        {loading ? 'Loading...' : 'Search'}
+                      </Button>
+                    </form>
 
-              {error && <div className="mt-4 text-red-500">{error}</div>}
+                    {error && <div className="mt-4 text-sm text-red-500">{error}</div>}
 
-              {responseData && (
-                  <div className="mt-12 overflow-x-auto">
-                    <table
-                        className="w-full min-w-max table-auto text-left shadow-md rounded-md divide-y divide-gray-200">
-                      <thead className="text-lg bg-gray-100 uppercase">
-                      <tr>
-                        <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">First
-                          Name
-                        </th>
-                        <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Other
-                          Name
-                        </th>
-                        <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Surname</th>
-                        <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">ID
-                          Number
-                        </th>
-                        <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Serial
-                          Number
-                        </th>
-                      </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                      <tr className="even:bg-blue-gray-50/50">
-                        <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.first_name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.other_name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.surname}</td>
-                        <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.id_number}</td>
-                        <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.serial_no}</td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                    {responseData && (
+                        <div className="mt-12 overflow-x-auto">
+                          <table
+                              className="w-full min-w-max table-auto text-left shadow-md rounded-md divide-y divide-gray-200">
+                            <thead className="text-lg bg-gray-100 uppercase">
+                            <tr>
+                              <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">First
+                                Name
+                              </th>
+                              <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Other
+                                Name
+                              </th>
+                              <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Surname</th>
+                              <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">ID
+                                Number
+                              </th>
+                              <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Serial
+                                Number
+                              </th>
+                            </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tr className="even:bg-blue-gray-50/50">
+                              <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.first_name}</td>
+                              <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.other_name}</td>
+                              <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.surname}</td>
+                              <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.id_number}</td>
+                              <td className="px-6 py-4 whitespace-nowrap pl-2">{responseData.serial_no}</td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                    )}
+                  </main>
               )}
-            </main>
+              {activeTab === "userDetails" && (
+                  <main className='max-w-2xl'>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div className='space-y-2'>
+                        <label htmlFor="idNumber">National ID</label>
+                        <input
+                            type="number"
+                            min={0}
+                            placeholder="Enter your ID Number"
+                            className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            required
+                        />
+                      </div>
+                      <div className='space-y-2'>
+                        <label htmlFor="idNumber">Date of Birth</label>
+                        <input
+                            type="date"
+                            min={0}
+                            placeholder="Enter your DOB"
+                            className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            required
+                        />
+                      </div>
+                      <hr/>
+                      <div className="flex items-end justify-end">
+                        <Button className="" type="submit" disabled={loading}>
+                          {loading ? 'Loading...' : 'Submit'}
+                        </Button>
+                      </div>
+                    </form>
+
+                  </main>
+              )}
+            </div>
+
           </div>
         </div>
       </div>
