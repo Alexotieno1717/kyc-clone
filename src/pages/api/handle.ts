@@ -6,14 +6,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const { idNumber, dob } = req.body;
-  if (!idNumber || !dob) {
-    return res.status(400).json({ message: 'Missing required parameters' });
+  const { idNumber } = req.body;
+
+  // Check if idNumber is provided
+  if (!idNumber) {
+    return res.status(400).json({ message: 'ID Number is required' });
   }
 
-  const formattedDob = new Date(dob).toLocaleDateString('en-US');
-
-  const url = `http://165.22.46.7/olive-tree-demos/api/kyc.php?id_number=${idNumber}&dob=${formattedDob}`;
+  // Construct the URL with idNumber only (dob is removed)
+  const url = `http://165.22.46.7/olive-tree-demos/api/kyc.php?id_number=${idNumber}`;
 
   try {
     const response = await axios.post(url);

@@ -15,13 +15,13 @@ const Header = () => {
 
     return (
         <>
-            <nav className="bg-[#206A3F] sticky top-0 z-50 mb-3">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 items-center justify-between">
+            <nav className="bg-[#78B9E4] sticky top-0 z-50 mb-3">
+                <div className="mx-auto max-w-7xl px-4 sm:px-2 lg:px-2">
+                    <div className="flex py-2 items-center justify-between">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <img className="h-32 w-32"
-                                     src="/olivetreelogo-light.svg"
+                                <img className=""
+                                     src="/bonga.png"
                                      alt="Your Company"/>
                             </div>
                             <div className="hidden md:block">

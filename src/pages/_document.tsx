@@ -23,7 +23,6 @@ class MyDocument extends Document {
         return (
             <Html lang="en" className="h-full bg-gray-100" suppressHydrationWarning>
                 <Head >
-                    <title>KYC: Homepage</title>
                 </Head>
                 <body>
                 <Main />
