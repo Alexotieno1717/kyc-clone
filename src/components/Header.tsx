@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import {auth} from "@/lib/firebase";
 
 
