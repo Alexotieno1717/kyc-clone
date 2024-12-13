@@ -4,18 +4,13 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import LayoutForm from "@/components/forms/layoutform";
-import { auth } from "@/lib/firebase"; // Firebase configuration
-import {
-    signInWithEmailAndPassword,
-    GoogleAuthProvider,
-    signInWithPopup,
-    onAuthStateChanged,
-} from "firebase/auth";
 import { useRouter } from "next/router";
 import { SuccessAlert } from "@/utils/alerts";
+import axios from "axios";
+import { isAuthenticated } from "@/utils/auth";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -25,63 +20,44 @@ const validationSchema = Yup.object().shape({
 const Signin = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
+
+    // Redirect if the user is already authenticated
+    useEffect(() => {
+        if (isAuthenticated()) {
+            router.push("/");
+        }
+    }, [router]);
 
     // Toggle password visibility
     const togglePassword = () => setPasswordVisible(!passwordVisible);
 
-    // Handle email/password sign-in
     const handleSubmit = async (values: { email: string; password: string }) => {
         setError(null); // Reset error state
+        setLoading(true);
+
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-            const user = userCredential.user;
+            const response = await axios.post('/api/signin', {
+                email: values.email,
+                password: values.password,
+            });
 
-            // Persist user data in localStorage
-            localStorage.setItem("user", JSON.stringify(user));
+            const data = response.data;
+            // Save user data or token to localStorage
+            localStorage.setItem('user', JSON.stringify(data));
+            console.log(data);
 
-            SuccessAlert("Log in Successful");
-            console.log("Sign-in successful");
+            // Handle successful response
+            SuccessAlert("Login Successful");
             await router.push("/");
-        } catch (err: any) {
-            console.error("Sign-in error:", err);
-            setError("Failed to sign in. Please check your credentials.");
+        } catch (error: any) {
+            console.error(error);
+            setError(error.response?.data?.message || "An error occurred during login.");
+        } finally {
+            setLoading(false);
         }
     };
-
-    // Handle Google sign-in
-    const handleGoogleSignIn = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;
-
-            // Persist user data in localStorage
-            localStorage.setItem("user", JSON.stringify(user));
-
-            SuccessAlert("Google Sign-In Successful");
-            console.log("Google Sign-in successful");
-            await router.push("/");
-        } catch (err: any) {
-            console.error("Google Sign-in error:", err);
-            setError("Failed to sign in with Google.");
-        }
-    };
-
-    // Monitor authentication state
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Persist user in localStorage if authenticated
-                localStorage.setItem("user", JSON.stringify(user));
-                console.log("User is already logged in:", user);
-                router.push("/");
-            } else {
-                localStorage.removeItem("user");
-            }
-        });
-        return () => unsubscribe();
-    }, [router]);
 
     return (
         <>
@@ -105,7 +81,6 @@ const Signin = () => {
                             <p className="mb-8 text-base font-normal text-gray-600">
                                 Welcome! Please enter your details.
                             </p>
-                            {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
                             <Formik
                                 initialValues={{
                                     email: "",
@@ -154,7 +129,10 @@ const Signin = () => {
                                         </span>
                                     </div>
 
-                                    <div className="flex justify-start">
+                                    <div className="flex flex-col justify-start">
+                                        <div>
+                                            {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
+                                        </div>
                                         <Link
                                             href="/auth/forgotpassword"
                                             className="text-sm font-semibold text-primary"
@@ -167,19 +145,8 @@ const Signin = () => {
                                         type="submit"
                                         className="flex justify-center w-full px-4 py-3 mb-8 text-base font-semibold border border-transparent rounded-lg shadow-sm focus:outline-none"
                                     >
-                                        Sign in
+                                        {loading ? 'Loading...' : 'Sign in'}
                                     </Button>
-                                    <div className="w-full text-center mb-4">
-                                        <Button
-                                            variant="outline"
-                                            type="button"
-                                            className="flex items-center justify-center w-full px-4 py-3 space-x-3 text-base font-semibold border border-gray-200 rounded-lg shadow-sm focus:outline-none"
-                                            onClick={handleGoogleSignIn}
-                                        >
-                                            <img src="/assets/icons/google.png" className="w-6 h-6" alt="Google"/>
-                                            <span>Sign in with Google</span>
-                                        </Button>
-                                    </div>
                                     <div className="inline-flex justify-center w-full">
                                         <p className="mr-2 text-sm font-normal">Don&apos;t have an account?</p>
                                         <Link

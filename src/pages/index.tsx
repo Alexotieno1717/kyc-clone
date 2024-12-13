@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { ErrorAlert, SuccessAlert } from "@/utils/alerts";
 import { Button } from "@/components/ui/button"; // Ensure Button component exists
 import axios from "axios";
+import withAuth from "@/utils/withAuth";
 
 interface ResponseData {
   surname: string;
@@ -214,4 +215,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default withAuth(Home);
