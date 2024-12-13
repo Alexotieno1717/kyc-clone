@@ -1,8 +1,10 @@
+"use client"
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { isAuthenticated } from '@/utils/auth';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
+    // eslint-disable-next-line react/display-name
     return (props: any) => {
         const router = useRouter();
 
