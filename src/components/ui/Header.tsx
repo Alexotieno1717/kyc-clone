@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const Links = [
     {
@@ -14,28 +14,32 @@ const Links = [
 const Header = () => {
     const [toggle, setToggle] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userName, setUserName] = useState<string | null>(null);
+    const [userName, setUserName] = useState<string>("");
     const router = useRouter();
 
-    // Check if the user is authenticated and get their name
+    // Check if user is authenticated on component mount
     useEffect(() => {
         const user = localStorage.getItem("user");
         if (user) {
-            const parsedUser = JSON.parse(user);
             setIsAuthenticated(true);
-            setUserName(parsedUser.client_name); // Use "email" or any property stored in the user object
-        } else {
-            setIsAuthenticated(false);
-            setUserName(null);
+            const userData = JSON.parse(user);
+            setUserName(userData.client_name); // Assuming the user object has a 'name' property
         }
-    }, []); // Run once when the component mounts
+    }, []);
 
-    // Handle logout
+    // Handle logout functionality
     const handleLogout = () => {
-        localStorage.removeItem("user"); // Remove the user from local storage
+        // Clear localStorage data
+        localStorage.removeItem('user');
+        localStorage.removeItem('kyc_auth');
+        localStorage.removeItem('access_token');
+
+        // Redirect to Sign In page
+        router.push("/auth/signin");
+
+        // Optionally update local state
         setIsAuthenticated(false);
-        setUserName(null);
-        router.replace("/auth/signin"); // Redirect to sign-in page
+        setUserName("");
     };
 
     return (

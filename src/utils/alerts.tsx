@@ -1,6 +1,8 @@
 // react toastify alert
-import 'react-toastify/dist/ReactToastify.min.css';
+
 import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // toast
 export const SuccessAlert = (message? : string) => {

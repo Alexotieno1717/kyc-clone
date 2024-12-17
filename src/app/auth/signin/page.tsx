@@ -4,13 +4,12 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
-import LayoutForm from "@/components/forms/layoutform";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { SuccessAlert } from "@/utils/alerts";
 import axios from "axios";
-import { isAuthenticated } from "@/utils/auth";
+import LayoutForm from "@/components/forms/LayoutForm";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -22,13 +21,6 @@ const Signin = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-
-    // Redirect if the user is already authenticated
-    useEffect(() => {
-        if (isAuthenticated()) {
-            router.push("/");
-        }
-    }, [router]);
 
     // Toggle password visibility
     const togglePassword = () => setPasswordVisible(!passwordVisible);
@@ -44,20 +36,25 @@ const Signin = () => {
             });
 
             const data = response.data;
-            // Save user data or token to localStorage
-            localStorage.setItem('user', JSON.stringify(data));
-            console.log(data);
+            localStorage.setItem('user', JSON.stringify(data)); // Save user data to localStorage
+            localStorage.setItem("kyc_auth", JSON.stringify(data.kyc_auth));
+            localStorage.setItem("access_token", data.access_token);
 
-            // Handle successful response
             SuccessAlert("Login Successful");
-            await router.push("/");
-        } catch (error: any) {
-            console.error(error);
-            setError(error.response?.data?.message || "An error occurred during login.");
+            router.push("/");
+        } catch (error) {
+            console.error('Login error:', error);
+
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data?.message || "An error occurred during login.");
+            } else {
+                setError("An unexpected error occurred. Please try again.");
+            }
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <>
@@ -143,7 +140,7 @@ const Signin = () => {
                                     <Button
                                         variant={"default"}
                                         type="submit"
-                                        className="flex justify-center w-full px-4 py-3 mb-8 text-base font-semibold border border-transparent rounded-lg shadow-sm focus:outline-none"
+                                        className="flex justify-center w-full px-4 py-3 mb-8 bg-blue-400 text-white text-base font-semibold border border-gray-200 rounded-lg shadow-sm focus:outline-none"
                                     >
                                         {loading ? 'Loading...' : 'Sign in'}
                                     </Button>
