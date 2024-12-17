@@ -17,17 +17,18 @@ const Header = () => {
     const [userName, setUserName] = useState<string>("");
     const router = useRouter();
 
-    // Check if user is authenticated on component mount
     useEffect(() => {
-        const user = localStorage.getItem("user");
-        if (user) {
-            setIsAuthenticated(true);
-            const userData = JSON.parse(user);
-            setUserName(userData.client_name); // Assuming the user object has a 'name' property
+        // Ensure this runs only on the client-side
+        if (typeof window !== "undefined") {
+            const user = localStorage.getItem("user");
+            if (user) {
+                setIsAuthenticated(true);
+                const userData = JSON.parse(user);
+                setUserName(userData.client_name); // Assuming the user object has a 'name' property
+            }
         }
-    }, []);
+    }, []); // Empty dependency array ensures this runs only once after the component is mounted
 
-    // Handle logout functionality
     const handleLogout = () => {
         // Clear localStorage data
         localStorage.removeItem('user');
