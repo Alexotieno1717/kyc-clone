@@ -26,11 +26,7 @@ export async function POST(req: NextRequest) {
 
         // Return the KYC API response
         return NextResponse.json(response.data, { status: 200 });
-    } catch (error: any) {
-        console.error("KYC API Error:", error.message);
-        return NextResponse.json(
-            { message: "Failed to fetch KYC data", error: error.message },
-            { status: error.response?.status || 500 }
-        );
+    } catch (error) {
+        console.error("KYC API Error:", error);
     }
 }
