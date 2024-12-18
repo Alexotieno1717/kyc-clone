@@ -36,6 +36,12 @@ const Signin = () => {
             });
 
             const data = response.data;
+
+             // Check if the response indicates a successful login
+             if (!data.access_token) {
+                throw new Error(data.message || "Invalid credentials");
+            }
+
             localStorage.setItem('user', JSON.stringify(data)); // Save user data to localStorage
             localStorage.setItem("kyc_auth", JSON.stringify(data.kyc_auth));
             localStorage.setItem("access_token", data.access_token);
@@ -48,7 +54,7 @@ const Signin = () => {
             if (axios.isAxiosError(error)) {
                 setError(error.response?.data?.message || "An error occurred during login.");
             } else {
-                setError("An unexpected error occurred. Please try again.");
+                setError("Invalid email or password");
             }
         } finally {
             setLoading(false);

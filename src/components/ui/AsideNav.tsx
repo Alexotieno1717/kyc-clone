@@ -10,7 +10,7 @@ const AsideNav: React.FC<AsideNavProps> = ({ responseData }) => {
     return (
         <>
             <div
-                className="col-span-3 relative overflow-hidden"
+                className="hidden md:block col-span-3 relative overflow-hidden"
                 style={{background: 'linear-gradient(to bottom, #78B9E4, #78B9E4, #78B9E4, white)'}}
             >
                 <img

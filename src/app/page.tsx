@@ -42,9 +42,9 @@ export default function Home() {
             // Check if the response contains matching ID details
             if (data && String(data.id_number) === String(idNumber)) {
                 setResponseData(data);
-                SuccessAlert("Details fetched successfully!");
+                SuccessAlert(response.data.status_message);
             } else {
-                ErrorAlert("The details provided do not match!");
+                ErrorAlert(response.data.status_message);
                 setResponseData(null);
             }
         } catch (error) {
@@ -62,7 +62,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl bg-gray-100 border border-gray-100 rounded-xl">
             <div className="grid grid-cols-12 gap-6">
                 <AsideNav responseData={responseData} />
-                <div className="col-span-9">
+                <div className="col-span-12 px-8 md:col-span-9 md:px-0">
                     <div className="flex justify-center py-4">
                         <div className="flex items-center bg-blue-400 rounded-full">
                             <button

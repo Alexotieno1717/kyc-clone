@@ -34,29 +34,59 @@ function IdNumberForm({
             </form>
 
             {responseData && (
-                <div className="mt-12 overflow-x-auto space-y-6">
-                    <div className='flex bg-white rounded-lg p-5 space-x-3 text-center'>
-                        <h1>Total Credits: </h1>
-                        <p className='text-2xl font-black'>{credits}</p>
+                <div className="mt-12 space-y-6">
+                    {/* Card Section */}
+                    <div className="flex flex-row justify-start rounded-[10px] bg-[rgba(220,241,254,100%)] px-6 py-5 gap-x-5 max-w-[800px] mx-auto">
+                        <img src="/assets/images/sender-id-3.png" className="w-[76px] h-[76px]" alt="logo showcasing" />
+                        <div className="space-y-1 pt-2">
+                            <h2 className="font-bold text-xl text-[#171725]">Total Credits:</h2>
+                            <p className="font-normal text-3xl text-[#344054]">{credits}</p>
+                        </div>
                     </div>
-                    <table className="w-full min-w-max table-auto text-left shadow-md rounded-md divide-y divide-gray-200">
-                        <thead className="text-lg bg-gray-100 uppercase">
-                        <tr>
-                            <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">First Name</th>
-                            <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Other Name</th>
-                            <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Surname</th>
-                            <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">ID Number</th>
-                            <th className="px-1 py-2 text-left text-xs font-medium text-gray-500">Serial Number</th>
-                        </tr>
+            
+                    {/* Content for Small Screens */}
+                    <div className="md:hidden w-full bg-white rounded-lg shadow-md p-6 space-y-6 max-w-[800px] mx-auto">
+                        <div className="flex space-x-6">
+                            <h1>First Name:</h1>
+                            <p>{responseData.first_name}</p>
+                        </div>
+                        <div className="flex space-x-6">
+                            <h1>Other Name:</h1>
+                            <p>{responseData.other_name}</p>
+                        </div>
+                        <div className="flex space-x-6">
+                            <h1>Surname:</h1>
+                            <p>{responseData.surname}</p>
+                        </div>
+                        <div className="flex space-x-6">
+                            <h1>ID Number:</h1>
+                            <p>{responseData.id_number}</p>
+                        </div>
+                        <div className="flex space-x-6">
+                            <h1>Serial Number:</h1>
+                            <p>{responseData.serial_no || "Null"}</p>
+                        </div>
+                    </div>
+            
+                    {/* Content for Medium and Larger Screens */}
+                    <table className="hidden md:table w-full bg-white shadow-md rounded-md border border-gray-200">
+                        <thead className="text-sm bg-gray-100 text-gray-600 uppercase">
+                            <tr>
+                                <th className="px-4 py-3 text-left font-medium border-b">First Name</th>
+                                <th className="px-4 py-3 text-left font-medium border-b">Other Name</th>
+                                <th className="px-4 py-3 text-left font-medium border-b">Surname</th>
+                                <th className="px-4 py-3 text-left font-medium border-b">ID Number</th>
+                                <th className="px-4 py-3 text-left font-medium border-b">Serial Number</th>
+                            </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td className="px-6 py-4 pl-2">{responseData.first_name}</td>
-                            <td className="px-6 py-4 pl-2">{responseData.other_name}</td>
-                            <td className="px-6 py-4 pl-2">{responseData.surname}</td>
-                            <td className="px-6 py-4 pl-2">{responseData.id_number}</td>
-                            <td className="px-6 py-4 pl-2">{responseData.serial_no}</td>
-                        </tr>
+                        <tbody className="text-gray-700 text-sm">
+                            <tr>
+                                <td className="px-4 py-3 border-b">{responseData.first_name}</td>
+                                <td className="px-4 py-3 border-b">{responseData.other_name}</td>
+                                <td className="px-4 py-3 border-b">{responseData.surname}</td>
+                                <td className="px-4 py-3 border-b">{responseData.id_number}</td>
+                                <td className="px-4 py-3 border-b">{responseData.serial_no || "Null"}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
