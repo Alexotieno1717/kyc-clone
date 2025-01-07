@@ -16,19 +16,19 @@ function UserDetailsForm({ loading }: { loading: boolean }) {
                     />
                 </div>
                 <div className="space-y-2">
-                    <label htmlFor="dob" className="block text-sm font-medium">
-                        Date of Birth
+                    <label htmlFor="phoneNumber" className="block text-sm font-medium">
+                        Phone number
                     </label>
                     <input
-                        type="date"
-                        placeholder="Enter your DOB"
+                        type="number"
+                        placeholder="Enter your Phone Number"
                         className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
                         required
                     />
                 </div>
                 <hr />
                 <div className="flex items-end justify-end">
-                    <Button type="submit" disabled={loading}>
+                    <Button className="mt-0 bg-blue-400 text-white" type="submit" disabled={loading}>
                         {loading ? "Loading..." : "Submit"}
                     </Button>
                 </div>
