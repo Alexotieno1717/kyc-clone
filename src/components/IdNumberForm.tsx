@@ -77,6 +77,7 @@ function IdNumberForm({
                                 <th className="px-4 py-3 text-left font-medium border-b">Surname</th>
                                 <th className="px-4 py-3 text-left font-medium border-b">ID Number</th>
                                 <th className="px-4 py-3 text-left font-medium border-b">Serial Number</th>
+                                <th className="px-4 py-3 text-left font-medium border-b">Gender</th>
                             </tr>
                         </thead>
                         <tbody className="text-gray-700 text-sm">
@@ -86,6 +87,7 @@ function IdNumberForm({
                                 <td className="px-4 py-3 border-b">{responseData.surname}</td>
                                 <td className="px-4 py-3 border-b">{responseData.id_number}</td>
                                 <td className="px-4 py-3 border-b">{responseData.serial_no || "Null"}</td>
+                                <td className="px-4 py-3 border-b">{responseData.gender === 'F' ? 'Female' : "Male"}</td>
                             </tr>
                         </tbody>
                     </table>

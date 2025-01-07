@@ -83,7 +83,7 @@ export default function Home() {
                                 }`}
                                 onClick={() => setActiveTab("userDetails")}
                             >
-                                User Details
+                                Phone Verification
                             </button>
                         </div>
                     </div>
