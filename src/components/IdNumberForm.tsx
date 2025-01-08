@@ -33,7 +33,7 @@ function IdNumberForm({
                 </Button>
             </form>
 
-            {responseData && (
+            {responseData && !loading ? (
                 <div className="mt-12 space-y-6">
                     {/* Card Section */}
                     <div className="flex flex-row justify-start rounded-[10px] bg-[rgba(220,241,254,100%)] px-6 py-5 gap-x-5 max-w-[800px] mx-auto">
@@ -92,6 +92,9 @@ function IdNumberForm({
                         </tbody>
                     </table>
                 </div>
+            ) : (
+                
+                !loading 
             )}
         </main>
     );
