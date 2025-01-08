@@ -20,7 +20,6 @@ export default function Home() {
     const [credits, setCredits] = useState<number>(0);
     const router = useRouter();
 
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -28,17 +27,22 @@ export default function Home() {
             // Retrieve kyc_token from localStorage
             const storageData = localStorage.getItem("kyc_auth");
             const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
-
+    
             if (!kycToken) {
                 ErrorAlert("KYC Token is missing. Please log in again.");
                 return router.push("/auth/signin");
             }
-
-            // Send ID number and KYC token to backend API
-            const response = await axios.post("/api/kyc", { idNumber, kycToken });
+    
+            // Send ID number and KYC token to backend API with a timeout
+            const response = await axios.post(
+                "/api/kyc", 
+                { idNumber, kycToken },
+                { timeout: 600000 } // 40 seconds timeout
+            );
+    
             setCredits(response.data.credits);
             const data: ResponseData = response.data.search_result;
-
+    
             // Check if the response contains matching ID details
             if (data && String(data.id_number) === String(idNumber)) {
                 setResponseData(data);
@@ -48,12 +52,52 @@ export default function Home() {
                 setResponseData(null);
             }
         } catch (error) {
-            console.error(error);
-            ErrorAlert("Failed to fetch details. Please try again.");
+            if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+                ErrorAlert("Request timed out. Please try again.");
+            } else {
+                console.error(error);
+                ErrorAlert("Failed to fetch details. Please try again.");
+            }
         } finally {
             setLoading(false);
         }
     };
+    
+
+
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+    //     try {
+    //         // Retrieve kyc_token from localStorage
+    //         const storageData = localStorage.getItem("kyc_auth");
+    //         const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
+
+    //         if (!kycToken) {
+    //             ErrorAlert("KYC Token is missing. Please log in again.");
+    //             return router.push("/auth/signin");
+    //         }
+
+    //         // Send ID number and KYC token to backend API
+    //         const response = await axios.post("/api/kyc", { idNumber, kycToken });
+    //         setCredits(response.data.credits);
+    //         const data: ResponseData = response.data.search_result;
+
+    //         // Check if the response contains matching ID details
+    //         if (data && String(data.id_number) === String(idNumber)) {
+    //             setResponseData(data);
+    //             SuccessAlert(response.data.status_message);
+    //         } else {
+    //             ErrorAlert(response.data.status_message);
+    //             setResponseData(null);
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         ErrorAlert("Failed to fetch details. Please try again.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
 
     return (
