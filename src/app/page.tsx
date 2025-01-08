@@ -48,7 +48,7 @@ export default function Home() {
                 setResponseData(data);
                 SuccessAlert(response.data.status_message);
             } else {
-                ErrorAlert("The ID number does not match any records.");
+                ErrorAlert(response.data.status_message);
                 setResponseData(null); // Reset data on failure
             }
         } catch (error) {
@@ -56,7 +56,7 @@ export default function Home() {
                 ErrorAlert("Request timed out. Please try again.");
             } else {
                 console.error(error);
-                ErrorAlert("Failed to fetch details. Please try again.");
+                ErrorAlert("Result Not Found");
             }
             setResponseData(null); // Reset data on error
         } finally {
