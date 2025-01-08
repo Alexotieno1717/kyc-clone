@@ -37,7 +37,7 @@ export default function Home() {
             const response = await axios.post(
                 "/api/kyc", 
                 { idNumber, kycToken },
-                { timeout: 300000 } // 50 seconds timeout
+                { timeout: 300000 } // 5 minutes timeout
             );
     
             setCredits(response.data.credits);
@@ -48,8 +48,8 @@ export default function Home() {
                 setResponseData(data);
                 SuccessAlert(response.data.status_message);
             } else {
-                ErrorAlert(response.data.status_message);
-                setResponseData(null);
+                ErrorAlert("The ID number does not match any records.");
+                setResponseData(null); // Reset data on failure
             }
         } catch (error) {
             if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
@@ -58,10 +58,12 @@ export default function Home() {
                 console.error(error);
                 ErrorAlert("Failed to fetch details. Please try again.");
             }
+            setResponseData(null); // Reset data on error
         } finally {
             setLoading(false);
         }
     };
+    
 
 
     return (
