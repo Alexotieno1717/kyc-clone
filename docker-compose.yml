@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3007:3000" # Host port 3007 -> Container port 3000
+
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3008:3000" # Host port 3008 -> Container port 3000
