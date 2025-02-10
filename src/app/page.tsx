@@ -4,11 +4,13 @@ import React, {useState} from "react";
 import axios from "axios";
 import {ErrorAlert, SuccessAlert} from "@/utils/alerts";
 import {ResponseData} from "@/types";
-import IdNumberForm from "@/components/IdNumberForm";
 import UserDetailsForm from "@/components/UserDetailsForm";
 import {useRouter} from "next/navigation";
 import AsideNav from "@/components/ui/AsideNav";
 import PrivateRoute from "@/components/PrivateRoute";
+import {Modal} from "@/components/ui/Modal";
+import {Button} from "@/components/ui/button";
+import IdNumberForm from "@/components/IdNumberForm";
 
 
 export default function Home() {
@@ -18,6 +20,7 @@ export default function Home() {
     const [idNumber, setIdNumber] = useState('');
     const [activeTab, setActiveTab] = useState("idNumber");
     const [credits, setCredits] = useState<number>(0);
+    const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -63,6 +66,12 @@ export default function Home() {
             setLoading(false);
         }
     };
+
+    const handleCloseModal = () => {
+        setIsOpen(false);
+        setIdNumber(""); // Reset ID number input
+        setResponseData(null); // Clear response data
+    };
     
 
 
@@ -98,12 +107,60 @@ export default function Home() {
                         </div>
                     </div>
 
-                    <div>
+                    <form onSubmit={handleSubmit} className="max-w-2xl flex items-center space-x-4">
+                        <div className="flex-grow">
+                            <input
+                                type="number"
+                                min={0}
+                                value={idNumber} // Bind the input field to state
+                                onChange={(e) => setIdNumber(e.target.value)}
+                                placeholder="Enter your ID Number"
+                                className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                required
+                            />
+
+                        </div>
+                        <Button
+                            className="mt-0 bg-blue-400 text-white"
+                            type="submit"
+                            disabled={loading}
+                            onClick={() => {
+                                if (!idNumber.trim()) {
+                                    ErrorAlert("Please enter your ID Number before searching.");
+                                    return;
+                                }
+                                setIsOpen(true);
+                            }}
+                        >
+                            {loading ? "Loading..." : "Search"}
+                        </Button>
+
+                    </form>
+
+                    <div className="hidden md:block">
+                        {loading ?
+                            ''
+                            :
+                            (
+                                <div>
+                                    {activeTab === "idNumber" && isOpen &&
+                                        <Modal
+                                            setIsOpen={handleCloseModal}
+                                            credits={credits}
+                                            responseData={responseData}
+                                            loading={loading}
+                                        />
+                                    }
+                                    {activeTab === "userDetails" && <UserDetailsForm loading={loading}/>}
+                                </div>
+                            )
+                        }
+                    </div>
+
+                    <div className='md:hidden'>
                         {activeTab === "idNumber" && (
                             <IdNumberForm
-                                handleSubmit={handleSubmit}
                                 credits={credits}
-                                setIdNumber={setIdNumber}
                                 responseData={responseData}
                                 loading={loading}
                             />
