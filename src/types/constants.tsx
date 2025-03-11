@@ -1,4 +1,4 @@
-import { Cloud, Hash, LogOut, Mail, MessageCircle, Sheet, UserPlus, Users } from "lucide-react";
+import { Cloud, LogOut } from "lucide-react";
 
 export const menuGroups = [
     {
