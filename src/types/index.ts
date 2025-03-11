@@ -1,6 +1,6 @@
 export interface ResponseData {
     surname: string;
-    serial_no: string;
+    serial_number: string;
     photo: string;
     other_name: string;
     id_number: string;
@@ -10,4 +10,5 @@ export interface ResponseData {
     dob: string;
     citizenship: string;
     valid: boolean;
+    date_of_birth: string;
 }

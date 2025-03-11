@@ -44,7 +44,7 @@ function IdNumberForm({
                         </div>
                         <div className="flex space-x-6">
                             <h1>Serial Number:</h1>
-                            <p>{responseData.serial_no || "Null"}</p>
+                            <p>{responseData.serial_number || "Null"}</p>
                         </div>
                     </div>
 
