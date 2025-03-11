@@ -69,10 +69,6 @@ export const Modal: React.FC<ModalProps> = ({ setIsOpen, responseData, loading, 
                                         <h1>ID Number:</h1>
                                         <p>{responseData.id_number}</p>
                                     </div>
-                                    <div className="flex space-x-6">
-                                        <h1>Serial Number:</h1>
-                                        <p>{responseData.serial_no || "Null"}</p>
-                                    </div>
                                 </div>
 
                             </div>
