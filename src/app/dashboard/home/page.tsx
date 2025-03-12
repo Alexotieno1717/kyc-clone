@@ -139,7 +139,9 @@ const Home = () => {
                     <div className="flex flex-col md:flex-row md:space-x-12 border border-gray-200 bg-white shadow-md p-4 md:p-10">
                         <div className='space-y-4'>
                             <IprsImage base64String={responseData.photo ?? ""} />
-                            <p className='font-bold'>{responseData.first_name} {responseData.other_name} {responseData.surname}</p>
+                            {responseData.photo && (
+                                <p className='font-bold'>{responseData.first_name} {responseData.other_name} {responseData.surname}</p>
+                            ) }
                         </div>
                         <div className='py-8'>
                             <div className="flex space-x-6">

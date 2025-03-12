@@ -14,7 +14,7 @@ const IprsImage = ({ base64String }: { base64String?: string }) => {
             {imageSrc ? (
                 <img src={imageSrc} alt="IPRS Search Result" className="w-60 h-60 object-cover" />
             ) : (
-                <p>No image available</p>
+                <p className='flex justify-center items-center py-24 border border-gray-300 p-10 rounded-[8px] text-gray-400'>No image available</p>
             )}
         </div>
     );
