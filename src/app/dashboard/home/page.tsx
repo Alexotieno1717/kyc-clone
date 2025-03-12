@@ -143,7 +143,7 @@ const Home = () => {
                                 <p className='font-bold'>{responseData.first_name} {responseData.other_name} {responseData.surname}</p>
                             ) }
                         </div>
-                        <div className='py-8'>
+                        <div className='py-4'>
                             <div className="flex space-x-6">
                                 <h1 className='font-bold'>first_name:</h1>
                                 <p>{responseData.first_name}</p>
