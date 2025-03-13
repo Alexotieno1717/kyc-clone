@@ -12,8 +12,7 @@ import {ErrorAlert, SuccessAlert} from "@/utils/alerts";
 
 interface Data {
     id: number;
-    question: string;
-    client_id: string;
+    client: string;
     searched_value: number;
     status: number;
     transaction_type_id: number;
@@ -31,11 +30,19 @@ export default function DataTable() {
 
     // Fetch data from the JSON file
     useEffect(() => {
-        fetch('/transactions.json')
+
+        // Retrieve kyc_token from localStorage
+        const storageData = localStorage.getItem("kyc_auth");
+        const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
+
+        console.log(kycToken);
+
+        fetch(`https://app.bongasms.co.ke/api/kyc-transactions?kyc_token=${kycToken}`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data.data);
                 setFilteredData(data.data); // Initialize filtered data
+                console.log(data.data);
             })
             .catch((error) => {
                 console.error('Error fetching contacts:', error);
@@ -81,7 +88,6 @@ export default function DataTable() {
 
 
 
-
     // Table columns
     const columns = React.useMemo<ColumnDef<Data>[]>(
         () => [
@@ -94,8 +100,8 @@ export default function DataTable() {
                 }
             },
             {
-                accessorKey: 'client_id',
-                header: 'Client ID',
+                accessorKey: 'client',
+                header: 'Client',
                 cell: (info) => info.getValue(),
             },
             {
@@ -105,8 +111,9 @@ export default function DataTable() {
             },
             {
                 accessorKey: 'transaction_type_id',
-                header: 'Transaction Type ID',
-                cell: (info) => info.getValue(),
+                header: 'Transaction Type',
+                cell: "ID Search",
+                // cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'updated_at',
@@ -121,7 +128,7 @@ export default function DataTable() {
                         <Button variant="ghost" size="icon">
                             <Eye className='text-green-400 size-5' />
                         </Button>
-                        <Link href={`/dashboard/survey/questions/edit/1`}>
+                        <Link href={`#`}>
                             <Button variant="ghost" size="icon">
                                 <Pencil className='text-yellow-400 size-5' />
                             </Button>

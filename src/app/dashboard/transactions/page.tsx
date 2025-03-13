@@ -7,6 +7,8 @@ import DataTable from "@/components/tables/dataTable";
 
 const Transactions = () => {
 
+
+
     return (
         <PrivateRoute>
             <div className="pt-8 mt-12 space-y-4 md:p-4">

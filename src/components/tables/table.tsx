@@ -6,6 +6,7 @@ import {
     flexRender,
     ColumnDef,
 } from '@tanstack/react-table';
+import NotFound from "@/components/notfound/notFound";
 
 interface ITableProps<T> {
     columns: ColumnDef<T>[];
@@ -23,7 +24,9 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
     });
 
     if (!data || data.length === 0) {
-        return <div className="p-8">No data Found</div>;
+        return (
+            <NotFound title={'data'} pathToCreate={'#'} />
+        );
     }
 
     return (
@@ -78,7 +81,7 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
                         onChange={(e) => {
                             table.setPageSize(Number(e.target.value));
                         }}
-                        className="bg-white border border-input h-10 px-1 py-2 justify-center whitespace-nowrap rounded-md text-md font-medium shadow-sm"
+                        className='transition ease-in-out delay-150 duration-300 border border-gray-400  font-medium rounded-[8px] text-base px-6 py-2 focus:outline-none hover:shadow-lg hover:border-blue-500'
                     >
                         {[10, 20, 30, 40, 50].map((pageSize) => (
                             <option key={pageSize} value={pageSize}>
@@ -99,7 +102,7 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
               {'Start'}
             </button> */}
                     <button
-                        className="border border-input h-10 px-4 py-2 justify-center whitespace-nowrap rounded-md text-sm font-medium shadow-sm hover:bg-gray-100 transition-all ease-linear duration-200"
+                        className='transition ease-in-out delay-150 duration-300 border border-gray-400  font-medium rounded-[8px] text-base px-6 py-2 focus:outline-none hover:shadow-lg hover:border-blue-500'
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
@@ -107,7 +110,7 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
                     </button>
 
                     <button
-                        className="border border-gray-400 rounded-md h-10 px-4 py-2 justify-center whitespace-nowrap text-sm font-medium shadow-sm hover:bg-gray-100 transition-all ease-linear duration-200"
+                        className='transition ease-in-out delay-150 duration-300 border border-gray-400  font-medium rounded-[8px] text-base px-6 py-2 focus:outline-none hover:shadow-lg hover:border-blue-500'
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
