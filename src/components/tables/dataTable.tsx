@@ -86,9 +86,12 @@ export default function DataTable() {
     const columns = React.useMemo<ColumnDef<Data>[]>(
         () => [
             {
-                accessorKey: 'id',
-                header: 'ID',
-                cell: (info) => info.getValue(),
+                id: 'id', // Unique ID for the column
+                header: '#',
+                cell:(props)=>{
+
+                    return props?.table?.getSortedRowModel()?.flatRows?.indexOf(props?.row)+1;
+                }
             },
             {
                 accessorKey: 'client_id',
