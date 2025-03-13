@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from "next/link";
 import {EllipsisVertical} from "lucide-react";
 
 interface OverviewCardsProps{
@@ -15,10 +14,6 @@ const OverviewCards = ({title, amount}: OverviewCardsProps) =>{
                     <EllipsisVertical color="grey" size={16} />
                 </div>
                 <p className="font-bold text-2xl text-gray-900">{amount}</p>
-            </div>
-            <hr className="border-gray-300" />
-            <div className='px-4 py-2 text-end'>
-                <Link href='#' className='text-sm'>View Reports</Link>
             </div>
         </div>
     )

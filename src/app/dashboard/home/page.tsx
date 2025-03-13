@@ -10,30 +10,14 @@ import {ResponseData} from "@/types";
 import {useRouter} from "next/navigation";
 import IprsImage from "@/components/IprsImage";
 
+
 const Home = () => {
     const [responseData, setResponseData] = useState<ResponseData | null>(null);
     const [idNumber, setIdNumber] = useState('');
     const [loading, setLoading] = useState(false);
     const [credits, setCredits] = useState<number | null>(null);
-    const [cost, setCost] = useState<number | null>(null);
 
     const router = useRouter();
-
-    // fetch contact from the json file
-    // useEffect(() => {
-    //     fetch('/resources.json')
-    //         .then((response) => response.json())
-    //         .then((data) =>{
-    //             setApiResponse(data.data);
-    //             // console.log(data.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching contacts:', error);
-    //         })
-    // }, [])
-
-
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -56,7 +40,6 @@ const Home = () => {
             );
 
             setCredits(response.data.credits);
-            setCost(response.data.cost ?? null);
             const data: ResponseData = response.data.search_result;
 
             // Check if the response contains matching ID details
@@ -81,10 +64,8 @@ const Home = () => {
     };
 
     const overviewValues = [
-        { title: "Client", amount: "Caritus" },
-        { title: "Total queries today", amount: "40" },
-        { title: "credits", amount: credits !== null ? credits.toString() : "0" },
-        { title: "cost Ksh", amount: cost !== null ? cost.toString() : "0" },
+        { title: "queries today", amount: "40" },
+        { title: "credits balance", amount: credits !== null ? credits.toString() : "0" },
     ];
 
 
@@ -94,7 +75,7 @@ const Home = () => {
                 <div className="flex justify-between">
                     <h1 className="font-semibold text-4xl text-[#171725] leading-10">Dashboard</h1>
                 </div>
-                <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 xl:grid-cols-2">
                     {overviewValues.map((item, index: number) => (
                         <OverviewCards
                             key={index}
@@ -135,50 +116,40 @@ const Home = () => {
                     </Button>
                 </form>
 
-                {responseData && !loading ? (
-                    <div className="flex flex-col md:flex-row md:space-x-12 border border-gray-200 bg-white shadow-md p-4 md:p-10">
-                        <div className='space-y-4'>
-                            <IprsImage base64String={responseData.photo ?? ""} />
-                            {responseData.photo && (
-                                <p className='font-bold'>{responseData.first_name} {responseData.other_name} {responseData.surname}</p>
-                            ) }
-                        </div>
-                        <div className='py-4'>
-                            <div className="flex space-x-6">
-                                <h1 className='font-bold'>first_name:</h1>
-                                <p>{responseData.first_name}</p>
+                <div className="w-3/4">
+                    <div className=''>
+                        {responseData && !loading ? (
+                            <div className="flex flex-col md:flex-row md:space-x-12 border border-gray-200 bg-white shadow-md p-4 md:p-4">
+                                <div className="space-y-4">
+                                    <IprsImage base64String={responseData.photo ?? ""} gender={responseData.gender} />
+                                    {responseData.photo && (
+                                        <p className="font-bold">
+                                            {responseData.first_name} {responseData.other_name} {responseData.surname}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="py-6 space-y-2">
+                                    {[
+                                        { label: "First Name", value: responseData.first_name },
+                                        { label: "Other Name", value: responseData.other_name },
+                                        { label: "Surname", value: responseData.surname },
+                                        { label: "ID Number", value: responseData.id_number },
+                                        { label: "Serial Number", value: responseData.serial_number || "Null" },
+                                        { label: "Gender", value: responseData.gender === "M" ? "Male" : responseData.gender === "F" ? "Female" : "Null" },
+                                        { label: "Date of Birth", value: responseData.date_of_birth || "Null" },
+                                        { label: "Citizenship", value: responseData.citizenship || "Null" },
+                                    ].map((item, index) => (
+                                        <div key={index} className="flex">
+                                            <h1 className="font-bold w-40">{item.label}:</h1>
+                                            <p>{item.value}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                            <div className="flex space-x-6">
-                                <h1 className='font-bold'>other_name:</h1>
-                                <p>{responseData.other_name}</p>
-                            </div>
-                            <div className="flex space-x-6">
-                                <h1 className='font-bold'>surname:</h1>
-                                <p>{responseData.surname}</p>
-                            </div>
-                            <div className="flex space-x-6">
-                                <h1 className='font-bold'>ID Number:</h1>
-                                <p>{responseData.id_number}</p>
-                            </div>
-                            <div className="flex space-x-6">
-                                <h1 className='font-bold'>Serial Number:</h1>
-                                <p>{responseData.serial_number || "Null"}</p>
-                            </div>
-                            <div className="flex space-x-6">
-                                <h1 className='font-bold'>Gender:</h1>
-                                <p>{responseData.gender === "M" ? "Male" : responseData.gender === "F" ? "Female" : "Null"}</p>
-                            </div>
-                            <div className="flex space-x-6">
-                                <h1 className='font-bold'>Date of Birth:</h1>
-                                <p>{responseData.date_of_birth || "Null"}</p>
-                            </div>
-                            <div className="flex space-x-6">
-                                <h1 className='font-bold'>Citizenship:</h1>
-                                <p>{responseData.citizenship || "Null"}</p>
-                            </div>
-                        </div>
+                        ) : null}
                     </div>
-                ) : null}
+                </div>
 
             </div>
         </PrivateRoute>
