@@ -69,7 +69,7 @@ const Home = () => {
         const storageData = localStorage.getItem("kyc_auth");
         const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
 
-        console.log(kycToken);
+        // console.log(kycToken);
 
         fetch(`https://app.bongasms.co.ke/api/kyc-report?kyc_token=${kycToken}`)
             .then((response) => response.json())
