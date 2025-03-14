@@ -34,7 +34,7 @@ const IprsImage: React.FC<IprsImageProps> = ({ base64String, gender }: IprsImage
                     alt="Placeholder Image"
                     width={60}
                     height={60}
-                    className="w-full h-full object-contain rounded-md"
+                    className="w-72 h-72 object-contain rounded-[8px] bg-gray-100"
                 />
             )}
         </div>
