@@ -76,8 +76,8 @@ const Home = () => {
             .then((data) => {
                 // setData(data.data);
                 setCredits(data.data.kyc_credit_balance);
-                setQueries(data.data.total_transactions)
-                console.log(data.data);
+                setQueries(data.data.total_transactions);
+                // console.log(data.data);
             })
             .catch((error) => {
                 console.error('Error fetching contacts:', error);
@@ -85,8 +85,8 @@ const Home = () => {
     }, []);
 
     const overviewValues = [
-        { title: "queries today", amount: queries !== null ? queries : null },
-        { title: "credits balance", amount: credits !== null ? credits.toString() : "0" },
+        { title: "queries today", amount: queries !== null ? queries : 0 },
+        { title: "credits balance", amount: credits !== null ? credits : 0 },
     ];
 
 

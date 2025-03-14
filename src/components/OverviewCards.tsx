@@ -3,7 +3,7 @@ import {EllipsisVertical} from "lucide-react";
 
 interface OverviewCardsProps{
     title: string;
-    amount: string;
+    amount: number | null;
 }
 const OverviewCards = ({title, amount}: OverviewCardsProps) =>{
     return (
