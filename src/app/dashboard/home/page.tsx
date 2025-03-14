@@ -20,11 +20,37 @@ const Home = () => {
 
     const router = useRouter();
 
+
+    const fetchData = async () => {
+        const storageData = localStorage.getItem("kyc_auth");
+        const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
+
+        if (!kycToken) {
+            ErrorAlert("KYC Token is missing. Please log in again.");
+            return router.push("/auth/signin");
+        }
+
+        try {
+            const response = await fetch(`https://app.bongasms.co.ke/api/kyc-report?kyc_token=${kycToken}`);
+            const data = await response.json();
+
+            setCredits(data.data.kyc_credit_balance);
+            setQueries(data.data.total_transactions); // ✅ Set queries on page load
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+// ✅ Run fetchData when the component mounts
+    useEffect(() => {
+        fetchData();
+    }, []); // ✅ Empty dependency array to run only on mount
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+
         try {
-            // Retrieve kyc_token from localStorage
             const storageData = localStorage.getItem("kyc_auth");
             const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
 
@@ -33,59 +59,42 @@ const Home = () => {
                 return router.push("/auth/signin");
             }
 
-            // Send ID number and KYC token to backend API with a timeout
             const response = await axios.post(
                 "/api/kyc",
                 { idNumber, kycToken },
-                { timeout: 300000 } // 5 minutes timeout
+                { timeout: 300000 }
             );
 
             const data: ResponseData = response.data.search_result;
 
-            // Check if the response contains matching ID details
             if (data && String(data.id_number) === String(idNumber)) {
                 setResponseData(data);
                 SuccessAlert(response.data.status_message);
+
+                // ✅ Refresh queries after successful search
+                fetchData();
             } else {
                 ErrorAlert(response.data.status_message);
-                setResponseData(null); // Reset data on failure
+                setResponseData(null);
             }
         } catch (error) {
-            if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+            if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
                 ErrorAlert("Request timed out. Please try again.");
             } else {
                 console.error(error);
                 ErrorAlert("Result Not Found");
             }
-            setResponseData(null); // Reset data on error
+            setResponseData(null);
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
 
-        // Retrieve kyc_token from localStorage
-        const storageData = localStorage.getItem("kyc_auth");
-        const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
 
-        // console.log(kycToken);
-
-        fetch(`https://app.bongasms.co.ke/api/kyc-report?kyc_token=${kycToken}`)
-            .then((response) => response.json())
-            .then((data) => {
-                // setData(data.data);
-                setCredits(data.data.kyc_credit_balance);
-                setQueries(data.data.total_transactions);
-                // console.log(data.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching contacts:', error);
-            });
-    }, []);
 
     const overviewValues = [
-        { title: "queries today", amount: queries !== null ? queries : 0 },
+        { title: "queries today", amount: queries !== null ? queries : 0},
         { title: "credits balance", amount: credits !== null ? credits : 0 },
     ];
 
