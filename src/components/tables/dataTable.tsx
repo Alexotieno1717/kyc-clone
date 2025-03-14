@@ -122,17 +122,9 @@ export default function DataTable() {
                 id: 'actions',
                 header: 'Actions',
                 cell: () => (
-                    <div className="flex space-x-2">
+                    <div className="flex text-center justify-center space-x-2">
                         <Button variant="ghost" size="icon">
                             <Eye className='text-green-400 size-5' />
-                        </Button>
-                        <Link href={`#`}>
-                            <Button variant="ghost" size="icon">
-                                <Pencil className='text-yellow-400 size-5' />
-                            </Button>
-                        </Link>
-                        <Button variant="ghost" size="icon">
-                            <Trash className='text-red-600 size-5' />
                         </Button>
                     </div>
                 ),

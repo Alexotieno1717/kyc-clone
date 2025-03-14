@@ -110,14 +110,14 @@ const Navbar = ({ sidebarOpen, toggleSidebar }: INavbarProps) => {
 									<li className=" text-sm font-medium  py-2">
 										Welcome, <span className="font-bold">{userName}</span>!
 									</li>
-									<li>
-										<button
-											onClick={handleLogout}
-											className=" rounded-md px-3 py-2 text-sm font-medium"
-										>
-											Log Out
-										</button>
-									</li>
+									{/*<li>*/}
+									{/*	<button*/}
+									{/*		onClick={handleLogout}*/}
+									{/*		className=" rounded-md px-3 py-2 text-sm font-medium"*/}
+									{/*	>*/}
+									{/*		Log Out*/}
+									{/*	</button>*/}
+									{/*</li>*/}
 								</ul>
 							</>
 						)}
@@ -130,7 +130,7 @@ const Navbar = ({ sidebarOpen, toggleSidebar }: INavbarProps) => {
 										<span className="sr-only">Open user menu</span>
 										<img
 											className="w-10 h-10 rounded-full"
-											src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+											src="/male.png"
 											alt="user photo"
 										/>
 									</button>
