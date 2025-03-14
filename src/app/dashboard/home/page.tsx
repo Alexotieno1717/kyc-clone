@@ -116,48 +116,44 @@ const Home = () => {
                     ))}
                 </div>
 
-                <form onSubmit={handleSubmit}
-                      // className="max-w-2xl flex items-center space-x-4"
-                      className="max-w-3xl flex items-center space-x-4"
-                >
-                    <div className="flex-grow">
-                        <input
-                            type="number"
-                            min={0}
-                            value={idNumber} // Bind the input field to state
-                            onChange={(e) => setIdNumber(e.target.value)}
-                            placeholder="Enter your ID Number"
-                            className="flex h-10 w-full border border-gray-300 rounded-[8px] bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
-                            required
-                        />
+                <div className="max-w-5xl w-full">
+                    {/* Search Form */}
+                    <form onSubmit={handleSubmit} className="flex items-center space-x-4">
+                        <div className="flex-grow">
+                            <input
+                                type="number"
+                                min={0}
+                                value={idNumber}
+                                onChange={(e) => setIdNumber(e.target.value)}
+                                placeholder="Enter your ID Number"
+                                className="flex h-10 w-full border border-gray-300 rounded-[8px] bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                required
+                            />
+                        </div>
+                        <Button
+                            className="mt-0 bg-primary hover:bg-blue-400 text-white rounded-[8px]"
+                            type="submit"
+                            disabled={loading}
+                            onClick={() => {
+                                if (!idNumber.trim()) {
+                                    ErrorAlert("Please enter your ID Number before searching.");
+                                    return;
+                                }
+                            }}
+                        >
+                            {loading ? "Loading..." : "Search"}
+                        </Button>
+                    </form>
 
-                    </div>
-                    <Button
-                        className="mt-0 bg-primary hover:bg-blue-400 text-white rounded-[8px]"
-                        type="submit"
-                        disabled={loading}
-                        onClick={() => {
-                            if (!idNumber.trim()) {
-                                ErrorAlert("Please enter your ID Number before searching.");
-                                return;
-                            }
-                        }}
-                    >
-                        {loading ? "Loading..." : "Search"}
-                    </Button>
-                </form>
-
-                <div className="w-3/4">
-                    <div className=''>
+                    {/* Data Display */}
+                    <div className="w-full mt-4">
                         {responseData && !loading ? (
-                            <div className="flex flex-col md:flex-row md:space-x-12 border border-gray-200 bg-white shadow-md p-4 md:p-4">
+                            <div className="border border-gray-200 bg-white shadow-md p-4 flex flex-col md:flex-row md:space-x-12">
                                 <div className="space-y-4">
                                     <IprsImage base64String={responseData.photo ?? ""} gender={responseData.gender} />
-                                    {/*{responseData.photo && (*/}
-                                        <p className="font-bold">
-                                            {responseData.first_name} {responseData.other_name} {responseData.surname}
-                                        </p>
-                                    {/*)}*/}
+                                    <p className="font-bold">
+                                        {responseData.first_name} {responseData.other_name} {responseData.surname}
+                                    </p>
                                 </div>
 
                                 <div className="py-6 space-y-2">
@@ -181,6 +177,7 @@ const Home = () => {
                         ) : null}
                     </div>
                 </div>
+
 
             </div>
         </PrivateRoute>

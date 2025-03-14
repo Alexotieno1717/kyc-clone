@@ -113,6 +113,11 @@ export default function DataTable() {
                 // cell: (info) => info.getValue(),
             },
             {
+                accessorKey: 'searched_value',
+                header: 'searched value',
+                cell: (info) => info.getValue(),
+            },
+            {
                 accessorKey: 'updated_at',
                 header: 'Updated At',
                 cell: (info) => formatDate(info.getValue() as string),
