@@ -35,14 +35,12 @@ export default function DataTable() {
         const storageData = localStorage.getItem("kyc_auth");
         const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
 
-        console.log(kycToken);
-
         fetch(`https://app.bongasms.co.ke/api/kyc-transactions?kyc_token=${kycToken}`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data.data);
                 setFilteredData(data.data); // Initialize filtered data
-                console.log(data.data);
+                // console.log(data.data);
             })
             .catch((error) => {
                 console.error('Error fetching contacts:', error);

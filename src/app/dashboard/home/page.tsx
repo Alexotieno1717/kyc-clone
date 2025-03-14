@@ -2,7 +2,7 @@
 
 import OverviewCards from "@/components/OverviewCards";
 import PrivateRoute from "@/components/PrivateRoute";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {ErrorAlert, SuccessAlert} from "@/utils/alerts";
 import axios from "axios";
@@ -16,6 +16,7 @@ const Home = () => {
     const [idNumber, setIdNumber] = useState('');
     const [loading, setLoading] = useState(false);
     const [credits, setCredits] = useState<number | null>(null);
+    const [queries, setQueries] = useState<number | null>(null);
 
     const router = useRouter();
 
@@ -39,7 +40,6 @@ const Home = () => {
                 { timeout: 300000 } // 5 minutes timeout
             );
 
-            setCredits(response.data.credits);
             const data: ResponseData = response.data.search_result;
 
             // Check if the response contains matching ID details
@@ -63,10 +63,32 @@ const Home = () => {
         }
     };
 
+    useEffect(() => {
+
+        // Retrieve kyc_token from localStorage
+        const storageData = localStorage.getItem("kyc_auth");
+        const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
+
+        console.log(kycToken);
+
+        fetch(`https://app.bongasms.co.ke/api/kyc-report?kyc_token=${kycToken}`)
+            .then((response) => response.json())
+            .then((data) => {
+                // setData(data.data);
+                setCredits(data.data.kyc_credit_balance);
+                setQueries(data.data.total_transactions)
+                console.log(data.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching contacts:', error);
+            });
+    }, []);
+
     const overviewValues = [
-        { title: "queries today", amount: "40" },
+        { title: "queries today", amount: queries !== null ? queries : null },
         { title: "credits balance", amount: credits !== null ? credits.toString() : "0" },
     ];
+
 
 
     return (
