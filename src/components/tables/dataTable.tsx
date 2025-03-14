@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '../ui/button';
-import { Eye, Pencil, Trash } from 'lucide-react';
-import Link from 'next/link';
+import { Eye } from 'lucide-react';
 import Table from "@/components/tables/table";
 import Datepicker from "react-tailwindcss-datepicker";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
