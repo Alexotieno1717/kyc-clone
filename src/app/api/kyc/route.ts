@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
         }
 
         // External KYC API URL
-        const apiUrl = `https://app.bongasms.co.ke/api/kyc`;
+        const apiUrl = `https://app.bongasms.co.ke/api/kyc?search_type=id_search`;
 
         // Make a GET request to the KYC API with query params
         const response = await axios.get(apiUrl, {

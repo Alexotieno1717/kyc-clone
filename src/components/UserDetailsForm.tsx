@@ -2,7 +2,6 @@ import {Button} from "@/components/ui/button";
 import React, {useState} from "react";
 import {ErrorAlert, SuccessAlert} from "@/utils/alerts";
 import axios from "axios";
-import {ResponseData} from "@/types";
 
 function UserDetailsForm() {
 
@@ -15,41 +14,54 @@ function UserDetailsForm() {
         setLoading(true);
 
         try {
+            // Retrieve KYC Token from localStorage
             const storageData = localStorage.getItem("kyc_auth");
-            const kycToken = storageData ? JSON.parse(storageData).kyc_token : null;
+            const kycToken = storageData ? JSON.parse(storageData)?.kyc_token : null;
 
             if (!kycToken) {
                 ErrorAlert("KYC Token is missing. Please log in again.");
+                setLoading(false);
                 return;
             }
 
+            // Make API request
             const response = await axios.post(
                 "/api/details",
                 { idNumber, phoneNumber, kycToken },
-                { timeout: 300000 }
+                { timeout: 30000 }
             );
 
-            const data: ResponseData = response.data.search_result;
+            // Ensure response data is valid
+            if (!response?.data) {
+                throw new Error("Invalid API response");
+            }
 
-            if (data && String(data.id_number) === String(idNumber)) {
-                console.log(data);
-                SuccessAlert("Result Found");
-            } else {
-                ErrorAlert(response.data.status_message);
-                // setResponseData(null);
+            const { data, status_message } = response.data;
+
+            // Validate API response structure
+            if (!data) {
+                // ErrorAlert(status_message || "Invalid response structure.");
+                ErrorAlert("Data Pass do not Match.");
+                // console.error(status_message);
+                // console.error("DATA Response Error:");
+                // console.error("API Response Error:", response.data);
+                return;
             }
+
+            // Check if details match
+            if (data.match) {
+                SuccessAlert(status_message || "Verification successful.");
+                console.log("Success:", data);
+            }
+
         } catch (error) {
-            if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
-                ErrorAlert("Request timed out. Please try again.");
-            } else {
-                console.error(error);
-                ErrorAlert("Result Not Found");
-            }
-            // setResponseData(null);
+            console.log(error);
         } finally {
             setLoading(false);
         }
-    }
+    };
+
+
     return (
         <main className="max-w-2xl">
             <form className="space-y-4" onSubmit={handleSubmit}>
@@ -59,6 +71,7 @@ function UserDetailsForm() {
                     </label>
                     <input
                         type="number"
+                        name='idNumber'
                         placeholder="Enter your ID Number"
                         onChange={(e) => setIdNumber(e.target.value)}
                         className="flex h-10 w-full border border-gray-400 rounded-[8px] text-gray-500 focus:text-dark bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -71,6 +84,7 @@ function UserDetailsForm() {
                     </label>
                     <input
                         type="number"
+                        name='phoneNumber'
                         placeholder="Enter your Phone Number"
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="flex h-10 w-full border border-gray-400 rounded-[8px] text-gray-500 focus:text-dark bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2"

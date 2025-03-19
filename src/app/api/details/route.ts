@@ -1,33 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-// API route handler for POST requests
 export async function POST(req: NextRequest) {
     try {
-        // Parse the incoming request body
         const body = await req.json();
         const { idNumber, phoneNumber, kycToken } = body;
 
-        // Validate required inputs
+        console.log("Request Body:", body);
+
         if (!idNumber || !phoneNumber || !kycToken) {
-            return NextResponse.json({ message: "ID Number and KYC Token are required." }, { status: 400 });
+            return NextResponse.json(
+                { message: "ID Number, Phone Number, and KYC Token are required." },
+                { status: 400 }
+            );
         }
 
-        // External KYC API URL
         const apiUrl = `https://app.bongasms.co.ke/api/kyc`;
 
-        // Make a GET request to the KYC API with query params
         const response = await axios.get(apiUrl, {
             params: {
                 kyc_token: kycToken,
                 search_param: idNumber,
-                phone_verification: phoneNumber,
+                phone_number: phoneNumber,
+                search_type: "phone_verification",
             },
+            timeout: 10000,
         });
 
-        // Return the KYC API response
+        console.log("KYC API Response:", response.data);
+
         return NextResponse.json(response.data, { status: 200 });
     } catch (error) {
-        console.error("KYC API Error:", error);
+        console.error("KYC API Error:", error || error);
+
+        return NextResponse.json(
+            { message: "Failed to connect to KYC API", error: error },
+            { status: 500 }
+        );
     }
 }
