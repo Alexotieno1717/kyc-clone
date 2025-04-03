@@ -27,6 +27,7 @@
     "react-spinners-kit": "^1.9.1",
     "react-tailwindcss-datepicker": "^2.0.0",
     "react-toastify": "^11.0.0",
+    "sweetalert": "^2.1.2",
     "tailwind-merge": "^2.5.5",
     "yup": "^1.6.0"
   },
