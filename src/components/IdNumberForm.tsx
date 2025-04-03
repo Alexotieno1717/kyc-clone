@@ -62,7 +62,7 @@ const IdNumberForm: React.FC<IdNumberFormProps> = ({ refreshData }) => {
                 });
 
             } else {
-                ErrorAlert(response.data.status_message);
+                // ErrorAlert(response.data.status_message);
                 swal({
                     title: "No data was Found",
                     icon: "info",
