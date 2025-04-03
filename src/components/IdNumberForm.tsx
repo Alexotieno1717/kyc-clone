@@ -116,36 +116,36 @@ const IdNumberForm: React.FC<IdNumberFormProps> = ({ refreshData }) => {
             </form>
 
             {/* Data Display */}
-            {/*<div className="w-full mt-4">*/}
-            {/*    {responseData && !loading ? (*/}
-            {/*        <div className="border border-gray-200 bg-white shadow-md p-4 flex flex-col md:flex-row md:space-x-12">*/}
-            {/*            <div className="space-y-4">*/}
-            {/*                <IprsImage base64String={responseData.photo ?? ""} gender={responseData.gender} />*/}
-            {/*                <p className="font-bold">*/}
-            {/*                    {responseData.first_name} {responseData.other_name} {responseData.surname}*/}
-            {/*                </p>*/}
-            {/*            </div>*/}
+            <div className="w-full mt-4">
+                {responseData && !loading ? (
+                    <div className="border border-gray-200 bg-white shadow-md p-4 flex flex-col md:flex-row md:space-x-12">
+                        <div className="space-y-4">
+                            <IprsImage base64String={responseData.photo ?? ""} gender={responseData.gender} />
+                            <p className="font-bold">
+                                {responseData.first_name} {responseData.other_name} {responseData.surname}
+                            </p>
+                        </div>
 
-            {/*            <div className="py-6 space-y-2">*/}
-            {/*                {[*/}
-            {/*                    { label: "First Name", value: responseData.first_name },*/}
-            {/*                    { label: "Other Name", value: responseData.other_name },*/}
-            {/*                    { label: "Surname", value: responseData.surname },*/}
-            {/*                    { label: "ID Number", value: responseData.id_number },*/}
-            {/*                    { label: "Serial Number", value: responseData.serial_number || "Null" },*/}
-            {/*                    { label: "Gender", value: responseData.gender === "M" ? "Male" : responseData.gender === "F" ? "Female" : "Null" },*/}
-            {/*                    { label: "Date of Birth", value: responseData.date_of_birth || "Null" },*/}
-            {/*                    { label: "Citizenship", value: responseData.citizenship || "Null" },*/}
-            {/*                ].map((item, index) => (*/}
-            {/*                    <div key={index} className="flex">*/}
-            {/*                        <h1 className="font-bold w-40">{item.label}:</h1>*/}
-            {/*                        <p>{item.value}</p>*/}
-            {/*                    </div>*/}
-            {/*                ))}*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    ) : null}*/}
-            {/*</div>*/}
+                        <div className="py-6 space-y-2">
+                            {[
+                                { label: "First Name", value: responseData.first_name },
+                                { label: "Other Name", value: responseData.other_name },
+                                { label: "Surname", value: responseData.surname },
+                                { label: "ID Number", value: responseData.id_number },
+                                { label: "Serial Number", value: responseData.serial_number || "Null" },
+                                { label: "Gender", value: responseData.gender === "M" ? "Male" : responseData.gender === "F" ? "Female" : "Null" },
+                                { label: "Date of Birth", value: responseData.date_of_birth || "Null" },
+                                { label: "Citizenship", value: responseData.citizenship || "Null" },
+                            ].map((item, index) => (
+                                <div key={index} className="flex">
+                                    <h1 className="font-bold w-40">{item.label}:</h1>
+                                    <p>{item.value}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : null}
+            </div>
 
         </div>
     );
