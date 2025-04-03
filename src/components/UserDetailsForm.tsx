@@ -1,7 +1,8 @@
 import {Button} from "@/components/ui/button";
 import React, {useState} from "react";
-import {ErrorAlert, SuccessAlert} from "@/utils/alerts";
+import {ErrorAlert} from "@/utils/alerts";
 import axios from "axios";
+import swal from "sweetalert";
 
 function UserDetailsForm() {
 
@@ -41,7 +42,12 @@ function UserDetailsForm() {
             // Validate API response structure
             if (!data) {
                 // ErrorAlert(status_message || "Invalid response structure.");
-                ErrorAlert("Data Pass do not Match.");
+                // ErrorAlert("Data Pass do not Match.");
+                swal({
+                    title: "Error",
+                    icon: "error",
+                    text: "Data pass do not match."
+                });
                 // console.error(status_message);
                 // console.error("DATA Response Error:");
                 // console.error("API Response Error:", response.data);
@@ -50,7 +56,12 @@ function UserDetailsForm() {
 
             // Check if details match
             if (data.match) {
-                SuccessAlert(status_message || "Verification successful.");
+                // SuccessAlert(status_message || "Verification successful.");
+                swal({
+                    title: "Success",
+                    icon: "success",
+                    text: status_message || "Verification successful."
+                });
                 console.log("Success:", data);
             }
 
