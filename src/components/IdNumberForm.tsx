@@ -3,9 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ErrorAlert, SuccessAlert } from "@/utils/alerts";
 import axios from "axios";
 import { ResponseData } from "@/types";
-import IprsImage from "@/components/IprsImage";
-import swal from 'sweetalert'
-
+import Swal from "sweetalert2";
 
 interface IdNumberFormProps {
     refreshData: () => void;
@@ -14,7 +12,7 @@ interface IdNumberFormProps {
 const IdNumberForm: React.FC<IdNumberFormProps> = ({ refreshData }) => {
     const [idNumber, setIdNumber] = useState('');
     const [loading, setLoading] = useState(false);
-    const [responseData, setResponseData] = useState<ResponseData | null>(null);
+    // const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -39,27 +37,71 @@ const IdNumberForm: React.FC<IdNumberFormProps> = ({ refreshData }) => {
             const data: ResponseData = response.data.search_result;
 
             if (data && String(data.id_number) === String(idNumber)) {
-                setResponseData(data);
+                // setResponseData(data);
                 SuccessAlert(response.data.status_message);
                 refreshData(); // Refresh queries after successful search
 
                 // Show data in SweetAlert
-                swal({
-                    dangerMode: false,
-                    className: "",
-                    title: "Search Result",
-                    text: `
-                    First Name: ${data.first_name}
-                    Other Name: ${data.other_name}
-                    Surname: ${data.surname}
-                    ID Number: ${data.id_number}
-                    Serial Number: ${data.serial_number || "Null"}
-                    Gender: ${data.gender === "M" ? "Male" : data.gender === "F" ? "Female" : "Null"}
-                    Date of Birth: ${data.date_of_birth || "Null"}
-                    Citizenship: ${data.citizenship || "Null"}
-                `,
-                    icon: "success",
+                const imageSrc = data.photo
+                    ? `data:image/jpeg;base64,${data.photo}`
+                    : data.gender === "M"
+                        ? "/male.svg"
+                        : "/female.svg";
+
+                Swal.fire({
+                    title: '',
+                    html: `
+                    <div style="
+                      display: flex;
+                      flex-direction: row;
+                      gap: 3rem;
+                      background: white;
+                      border-radius: 8px;
+                      text-align: left;
+                      justify-content: center;
+                      align-items: flex-start;
+                    ">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; padding-top: 30px;">
+                        <img 
+                          src="${imageSrc}" 
+                          alt="User Image" 
+                          style="width: 180px; height: 180px; object-fit: contain; border-radius: 8px; background: #f3f3f3;" 
+                        />
+                        <p style="font-weight: bold; font-size: 1.1rem;">
+                          ${data.first_name} ${data.other_name} ${data.surname}
+                        </p>
+                      </div>
+                
+                      <div style="display: flex; flex-direction: column; gap: 0.5rem; padding-top: 1.5rem;">
+                        ${[
+                                        { label: "First Name", value: data.first_name },
+                                        { label: "Other Name", value: data.other_name },
+                                        { label: "Surname", value: data.surname },
+                                        { label: "ID Number", value: data.id_number },
+                                        { label: "Serial Number", value: data.serial_number || "Null" },
+                                        { label: "Gender", value: data.gender === "M" ? "Male" : data.gender === "F" ? "Female" : "Null" },
+                                        { label: "Date of Birth", value: data.date_of_birth || "Null" },
+                                        { label: "Citizenship", value: data.citizenship || "Null" },
+                                    ].map(
+                                        (item) => `
+                            <div style="display: flex;">
+                              <span style="width: 150px; font-weight: bold;">${item.label}:</span>
+                              <span>${item.value}</span>
+                            </div>
+                          `
+                                    ).join("")}
+                      </div>
+                    </div>
+                  `,
+                    showConfirmButton: false,
+                    width: 700,
+                    background: "#fff",
+                    customClass: {
+                        popup: 'rounded-xl shadow-md',
+                    }
                 });
+
+
 
             } else {
                 // ErrorAlert(response.data.status_message);
@@ -69,7 +111,6 @@ const IdNumberForm: React.FC<IdNumberFormProps> = ({ refreshData }) => {
                     text: `Opps! We couldn’t get any result for the ID number ${idNumber}`,
                     dangerMode: false,
                 });
-                setResponseData(null);
             }
         } catch (error) {
             if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
@@ -78,7 +119,6 @@ const IdNumberForm: React.FC<IdNumberFormProps> = ({ refreshData }) => {
                 console.error(error);
                 ErrorAlert("Result Not Found");
             }
-            setResponseData(null);
         } finally {
             setLoading(false);
         }
@@ -114,38 +154,6 @@ const IdNumberForm: React.FC<IdNumberFormProps> = ({ refreshData }) => {
                     {loading ? "Loading..." : "Search"}
                 </Button>
             </form>
-
-            {/* Data Display */}
-            <div className="w-full mt-4">
-                {responseData && !loading ? (
-                    <div className="border border-gray-200 bg-white shadow-md p-4 flex flex-col md:flex-row md:space-x-12">
-                        <div className="space-y-4">
-                            <IprsImage base64String={responseData.photo ?? ""} gender={responseData.gender} />
-                            <p className="font-bold">
-                                {responseData.first_name} {responseData.other_name} {responseData.surname}
-                            </p>
-                        </div>
-
-                        <div className="py-6 space-y-2">
-                            {[
-                                { label: "First Name", value: responseData.first_name },
-                                { label: "Other Name", value: responseData.other_name },
-                                { label: "Surname", value: responseData.surname },
-                                { label: "ID Number", value: responseData.id_number },
-                                { label: "Serial Number", value: responseData.serial_number || "Null" },
-                                { label: "Gender", value: responseData.gender === "M" ? "Male" : responseData.gender === "F" ? "Female" : "Null" },
-                                { label: "Date of Birth", value: responseData.date_of_birth || "Null" },
-                                { label: "Citizenship", value: responseData.citizenship || "Null" },
-                            ].map((item, index) => (
-                                <div key={index} className="flex">
-                                    <h1 className="font-bold w-40">{item.label}:</h1>
-                                    <p>{item.value}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ) : null}
-            </div>
 
         </div>
     );
