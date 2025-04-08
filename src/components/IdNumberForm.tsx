@@ -117,7 +117,12 @@ const IdNumberForm: React.FC<IdNumberFormProps> = ({ refreshData }) => {
                 ErrorAlert("Request timed out. Please try again.");
             } else {
                 console.error(error);
-                ErrorAlert("Result Not Found");
+                swal({
+                    title: "No data was Found",
+                    icon: "info",
+                    text: `Opps! We couldn’t get any result for the ID number ${idNumber}`,
+                    dangerMode: false,
+                });
             }
         } finally {
             setLoading(false);
