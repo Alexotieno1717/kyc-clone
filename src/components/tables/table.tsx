@@ -6,6 +6,7 @@ import {
     flexRender,
     ColumnDef,
 } from '@tanstack/react-table';
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import NotFound from "@/components/notfound/notFound";
 
 interface ITableProps<T> {
@@ -30,16 +31,17 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
     }
 
     return (
-        <div className="p-4">
-            <div className="relative sm:rounded-lg overflow-x-auto">
-                <table id="react-table" className="w-full min-w-max table-auto text-left shadow-lg rounded-lg divide-y divide-gray-200">
-                    <thead className="text-lg uppercase">
+        <div className="p-2 md:p-3">
+            <div className="relative overflow-hidden bg-white shadow-[0_18px_60px_-35px_rgba(15,23,42,0.45)]">
+                <div className="overflow-x-auto">
+                <table id="react-table" className="w-full min-w-max border-separate [border-spacing:0_10px] table-auto text-left">
+                    <thead className="bg-slate-900 text-lg uppercase">
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header) => (
                                 <th
                                     key={header.id}
-                                    className="text-center px-1 py-2  text-base font-medium text-gray-500 uppercase tracking-wider"
+                                    className="px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-200 md:text-xs"
                                     colSpan={header.colSpan}
                                 >
                                     {header.isPlaceholder ? null : (
@@ -52,11 +54,13 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
                         </tr>
                     ))}
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                    {table.getRowModel().rows.map((row) => (
-                        <tr key={row.id} className="text-center  *:even:bg-blue-gray-50/50 text-sm">
+                    <tbody className="bg-white">
+                    {table.getRowModel().rows.map((row, index) => (
+                        <tr key={row.id} className={`text-center text-sm transition-all duration-200 hover:-translate-y-0.5 ${
+                            index % 2 === 0 ? "" : ""
+                        }`}>
                             {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id} className="text-sm px-1 py-4 whitespace-nowrap pl-2">
+                                <td key={cell.id} className="whitespace-nowrap bg-slate-50 px-4 py-3.5 text-xs font-medium text-slate-700 md:text-sm">
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </td>
                             ))}
@@ -64,11 +68,12 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
                     ))}
                     </tbody>
                 </table>
+                </div>
             </div>
 
-            <div className="h-2 pt-6" />
-            <div className="flex gap-2 justify-between pt-3 border-t border-gray-200">
-                <div className="flex pt-2 gap-4">
+            <div className="h-2 pt-5" />
+            <div className="flex flex-col justify-between gap-3 pt-2 md:flex-row md:items-center">
+                <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-slate-50 px-3 py-2">
                     {/* <span className="flex items-center gap-1">
               <div>Page</div>
               <strong>
@@ -81,7 +86,7 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
                         onChange={(e) => {
                             table.setPageSize(Number(e.target.value));
                         }}
-                        className='transition ease-in-out delay-150 duration-300 border border-gray-400  font-medium rounded-[8px] text-base px-6 py-2 focus:outline-none hover:shadow-lg hover:border-blue-500'
+                        className='rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition duration-200 focus:outline-none'
                     >
                         {[10, 20, 30, 40, 50].map((pageSize) => (
                             <option key={pageSize} value={pageSize}>
@@ -90,10 +95,13 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
                         ))}
                     </select>
 
-                    <p className='flex items-center justify-center'>Entries Per Page</p>
+                    <p className='flex items-center justify-center text-sm text-slate-500'>Entries Per Page</p>
                 </div>
 
-                <div className="pt-3 flex gap-3">
+                <div className="flex items-center gap-2 md:pt-0">
+                    <p className="mr-2 text-sm text-slate-500">
+                        Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                    </p>
                     {/* <button
               className="border border-input h-10 px-4 py-2 justify-center whitespace-nowrap rounded-md text-sm font-medium shadow-sm hover:bg-gray-100 transition-all ease-linear duration-200"
               onClick={() => table.setPageIndex(0)}
@@ -102,19 +110,21 @@ export default function Table<T>({ data, columns }: ITableProps<T>) {
               {'Start'}
             </button> */}
                     <button
-                        className='transition ease-in-out delay-150 duration-300 border border-gray-400  font-medium rounded-[8px] text-base px-6 py-2 focus:outline-none hover:shadow-lg hover:border-blue-500'
+                        className='inline-flex items-center gap-1 rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition duration-200 focus:outline-none hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-50'
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
+                        <ChevronLeft className="h-4 w-4" />
                         {'Previous'}
                     </button>
 
                     <button
-                        className='transition ease-in-out delay-150 duration-300 border border-gray-400  font-medium rounded-[8px] text-base px-6 py-2 focus:outline-none hover:shadow-lg hover:border-blue-500'
+                        className='inline-flex items-center gap-1 rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition duration-200 focus:outline-none hover:bg-black/85 disabled:cursor-not-allowed disabled:opacity-50'
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
                         {'Next'}
+                        <ChevronRight className="h-4 w-4" />
                     </button>
                     {/* <button
               className="border border-input h-10 px-4 py-2 justify-center whitespace-nowrap rounded-md text-sm font-medium shadow-sm hover:bg-gray-100 transition-all ease-linear duration-200"

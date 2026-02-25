@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '../ui/button';
-import { Eye } from 'lucide-react';
+import { CheckCircle2, Eye } from 'lucide-react';
 import Table from "@/components/tables/table";
 import Datepicker from "react-tailwindcss-datepicker";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
@@ -26,6 +26,19 @@ export default function DataTable() {
         startDate: null,
         endDate: null,
     });
+
+    const statusPill = (status: number | string) => {
+        const numeric = Number(status);
+        const isOk = numeric === 1 || String(status).toLowerCase() === "success";
+
+        return (
+            <span className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold ${
+                isOk ? "bg-emerald-100 text-emerald-700" : "bg-red-500/15 text-red-900"
+            }`}>
+                {isOk ? "Success" : String(status)}
+            </span>
+        );
+    };
 
     // Fetch data from the JSON file
     useEffect(() => {
@@ -104,31 +117,34 @@ export default function DataTable() {
             {
                 accessorKey: 'status',
                 header: 'Status',
-                cell: (info) => info.getValue(),
+                cell: (info) => statusPill(info.getValue() as number | string),
             },
             {
                 accessorKey: 'transaction_type_id',
                 header: 'Transaction Type',
-                cell: "ID Search",
-                // cell: (info) => info.getValue(),
+                cell: () => <span className="text-slate-700">ID Search</span>,
             },
             {
                 accessorKey: 'searched_value',
                 header: 'searched value',
-                cell: (info) => info.getValue(),
+                cell: (info) => (
+                    <span className="font-medium text-slate-800">{String(info.getValue() ?? "-")}</span>
+                ),
             },
             {
                 accessorKey: 'updated_at',
                 header: 'Updated At',
-                cell: (info) => formatDate(info.getValue() as string),
+                cell: (info) => (
+                    <span className="text-slate-600">{formatDate(info.getValue() as string)}</span>
+                ),
             },
             {
                 id: 'actions',
                 header: 'Actions',
                 cell: () => (
                     <div className="flex text-center justify-center space-x-2">
-                        <Button variant="ghost" size="icon">
-                            <Eye className='text-green-400 size-5' />
+                        <Button variant="ghost" size="icon" className="rounded-full bg-slate-100 hover:bg-slate-200">
+                            <Eye className='size-4 text-slate-700' />
                         </Button>
                     </div>
                 ),
@@ -140,27 +156,37 @@ export default function DataTable() {
     return (
         <div>
             {/* Date Range Picker and Filter Button */}
-            <div className="inline-flex w-full items-center mb-4">
-                <Datepicker
-                    value={value}
-                    onChange={setValue}
-                    showShortcuts
-                    inputClassName={"dark:text-gray-400 text-grey dark:bg-white w-full border border-gray-300 py-2 rounded-xl pl-4"}
-                    primaryColor={"blue"}
-                />
-                <button
-                    type="submit"
-                    onClick={filterDataByDate}
-                    disabled={!value?.startDate || !value?.endDate}  // Disable if no date is selected
-                    className={`transition ease-in-out delay-150 duration-300 text-white font-medium rounded-xl text-base px-12 py-2.5 ml-4 focus:outline-none ${
-                        !value?.startDate || !value?.endDate
-                            ? "bg-gray-400 cursor-not-allowed"   // Grey out the button if disabled
-                            : "bg-primary hover:bg-blue-400"
-                    }`}
-                >
-                    Filter
-                </button>
-
+            <div className="mb-5 rounded-2xl bg-gradient-to-r from-slate-50 to-sky-50/40 p-3 shadow-sm md:p-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:items-end">
+                    <div className="md:col-span-9">
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Date Range</p>
+                        <Datepicker
+                            value={value}
+                            onChange={setValue}
+                            showShortcuts
+                            inputClassName={"w-full rounded-xl bg-white py-2.5 pl-4 text-slate-700 shadow-sm ring-1 ring-slate-200"}
+                            primaryColor={"blue"}
+                        />
+                    </div>
+                    <div className="md:col-span-3">
+                        <button
+                            type="submit"
+                            onClick={filterDataByDate}
+                            disabled={!value?.startDate || !value?.endDate}  // Disable if no date is selected
+                            className={`h-11 w-full rounded-xl px-6 text-sm font-semibold text-white shadow-sm transition duration-200 focus:outline-none ${
+                                !value?.startDate || !value?.endDate
+                                    ? "cursor-not-allowed bg-slate-300"
+                                    : "bg-primary hover:bg-blue-400"
+                            }`}
+                        >
+                            Apply Filter
+                        </button>
+                    </div>
+                </div>
+                <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-medium text-slate-500">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                    Filter by start and end date to narrow records.
+                </div>
             </div>
 
             {/* Table */}

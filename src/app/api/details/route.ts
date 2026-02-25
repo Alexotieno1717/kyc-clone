@@ -11,31 +11,30 @@ export async function POST(req: NextRequest) {
         if (!idNumber || !phoneNumber || !kycToken) {
             return NextResponse.json(
                 { message: "ID Number, Phone Number, and KYC Token are required." },
-                { status: 400 }
             );
         }
 
         const apiUrl = `https://app.bongasms.co.ke/api/kyc`;
+
 
         const response = await axios.get(apiUrl, {
             params: {
                 kyc_token: kycToken,
                 search_param: idNumber,
                 phone_number: phoneNumber,
-                search_type: "phone_verification",
+                // search_type: "phone_verification",
             },
             timeout: 10000,
         });
 
         console.log("KYC API Response:", response.data);
 
-        return NextResponse.json(response.data, { status: 200 });
+        return NextResponse.json(response.data);
     } catch (error) {
         console.error("KYC API Error:", error || error);
 
         return NextResponse.json(
-            { message: "Failed to connect to KYC API", error: error },
-            { status: 500 }
+            { message: "Failed to connect to KYC API", error: error }
         );
     }
 }
