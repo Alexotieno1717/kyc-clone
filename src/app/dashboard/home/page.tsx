@@ -8,6 +8,11 @@ import {useRouter} from "next/navigation";
 import UserDetailsForm from "@/components/UserDetailsForm";
 import IdNumberForm from "@/components/IdNumberForm";
 
+type OverviewItem = {
+    id: string
+    title: string
+    amount: number
+}
 
 const Home = () => {
     const [credits, setCredits] = useState<number | null>(null);
@@ -40,14 +45,19 @@ const Home = () => {
         fetchData();
     }, [fetchData]);
 
-    const overviewValues = [
-        { id: "queries-today", title: "queries today", amount: queries !== null ? queries : 0},
-        { id: "credits-balance", title: "credits balance", amount: credits !== null ? credits : 0 },
-    ];
+    // const overviewValues = [
+    //     { id: "queries-today", title: "queries today", amount: queries !== null ? queries : 0},
+    //     { id: "credits-balance", title: "credits balance", amount: credits !== null ? credits : 0 },
+    // ];
+
+    const overviewValues: OverviewItem[] = [
+        { id: "queries-today", title: "queries today", amount: queries ?? 0 },
+        { id: "credits-balance", title: "credits balance", amount: credits ?? 0 },
+    ]
 
     return (
         <PrivateRoute>
-            <div className="relative mx-auto mt-10 max-w-7xl space-y-6 px-1 pb-8 pt-6 sm:mt-12 md:px-4">
+            <div className="relative mx-auto mt-10 max-w-9xl space-y-6 px-1 pb-8 pt-6 sm:mt-12 md:px-4">
                 <div
                     className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 rounded-3xl"
                     style={{ background: "radial-gradient(95% 90% at 0% 0%, rgba(14,165,233,0.22) 0%, rgba(15,23,42,0) 72%), radial-gradient(90% 90% at 100% 0%, rgba(34,197,94,0.18) 0%, rgba(15,23,42,0) 70%)" }}
@@ -75,7 +85,11 @@ const Home = () => {
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {overviewValues.map((item) => (
+                    {overviewValues.map((item:{
+                        id:string;
+                        title:string;
+                        amount:number;
+                    }) => (
                         <OverviewCards
                             key={item.id}
                             cardKey={item.id}

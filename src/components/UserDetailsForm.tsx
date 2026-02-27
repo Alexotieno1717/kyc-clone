@@ -37,7 +37,9 @@ function UserDetailsForm() {
                 throw new Error("Invalid API response");
             }
 
-            const { data, status_message } = response.data;
+            const { data, status_message } = response.data.search_result;
+
+            console.log(response.data);
 
             // Validate API response structure
             if (!data) {
