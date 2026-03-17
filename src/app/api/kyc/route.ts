@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
         const { idNumber, serialNumber, dob, kycToken } = body;
 
         // Validate required inputs
-        if (!idNumber || !kycToken || !serialNumber || !dob) {
+        if (!idNumber || !kycToken) {
             return NextResponse.json({ message: "ID Number and KYC Token are required." });
         }
 
@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
             params: {
                 kyc_token: kycToken,
                 search_param: idNumber,
-                serial_number: serialNumber,
-                date_of_birth: dob,
+                ...(serialNumber ? { serial_number: serialNumber } : {}),
+                ...(dob ? { date_of_birth: dob } : {}),
             },
         });
 

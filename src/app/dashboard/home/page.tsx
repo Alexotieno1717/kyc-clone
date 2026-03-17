@@ -7,6 +7,7 @@ import {ErrorAlert} from "@/utils/alerts";
 import {useRouter} from "next/navigation";
 import UserDetailsForm from "@/components/UserDetailsForm";
 import IdNumberForm from "@/components/IdNumberForm";
+import IdNumberSearchForm from "@/components/IdNumberSearchForm";
 
 type OverviewItem = {
     id: string
@@ -17,7 +18,7 @@ type OverviewItem = {
 const Home = () => {
     const [credits, setCredits] = useState<number | null>(null);
     const [queries, setQueries] = useState<number | null>(null);
-    const [activeTab, setActiveTab] = useState("idNumber");
+    const [activeTab, setActiveTab] = useState("idNumberSearch");
 
     const router = useRouter();
 
@@ -103,21 +104,38 @@ const Home = () => {
                 {/* Tabs for switching between id number and user details */}
                 <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
                     <p className="mb-3 text-sm font-semibold text-slate-700">Choose Verification Type</p>
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                         <button
                             type="button"
                             className={`group rounded-2xl border px-4 py-3 text-left transition-all duration-200 ${
-                                activeTab === "idNumber"
+                                activeTab === "idNumberSearch"
+                                    ? "border-indigo-300 bg-indigo-50 shadow-sm ring-1 ring-indigo-200"
+                                    : "border-slate-200 bg-white hover:border-indigo-200 hover:bg-indigo-50/40"
+                            }`}
+                            onClick={() => setActiveTab("idNumberSearch")}
+                        >
+                            <p className={`text-sm font-semibold ${activeTab === "idNumberSearch" ? "text-indigo-800" : "text-slate-800"}`}>
+                                ID Number Search
+                            </p>
+                            <p className={`mt-1 text-xs ${activeTab === "idNumberSearch" ? "text-indigo-700" : "text-slate-500"}`}>
+                                Search identity by ID number only.
+                            </p>
+                        </button>
+
+                        <button
+                            type="button"
+                            className={`group rounded-2xl border px-4 py-3 text-left transition-all duration-200 ${
+                                activeTab === "idNumberLookup"
                                     ? "border-sky-300 bg-sky-50 shadow-sm ring-1 ring-sky-200"
                                     : "border-slate-200 bg-white hover:border-sky-200 hover:bg-sky-50/40"
                             }`}
-                            onClick={() => setActiveTab("idNumber")}
+                            onClick={() => setActiveTab("idNumberLookup")}
                         >
-                            <p className={`text-sm font-semibold ${activeTab === "idNumber" ? "text-sky-800" : "text-slate-800"}`}>
-                                ID Number Lookup
+                            <p className={`text-sm font-semibold ${activeTab === "idNumberLookup" ? "text-sky-800" : "text-slate-800"}`}>
+                                ID Number Verification
                             </p>
-                            <p className={`mt-1 text-xs ${activeTab === "idNumber" ? "text-sky-700" : "text-slate-500"}`}>
-                                Verify a person using national ID details.
+                            <p className={`mt-1 text-xs ${activeTab === "idNumberLookup" ? "text-sky-700" : "text-slate-500"}`}>
+                                Verify ID number with serial number.
                             </p>
                         </button>
 
@@ -142,8 +160,11 @@ const Home = () => {
 
                 {/* Tabs Data */}
                 <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-                    {activeTab === "idNumber" && (
+                    {activeTab === "idNumberLookup" && (
                         <IdNumberForm refreshData={fetchData} />
+                    )}
+                    {activeTab === "idNumberSearch" && (
+                        <IdNumberSearchForm refreshData={fetchData} />
                     )}
                     {activeTab === "userDetails" && <UserDetailsForm />}
                 </div>
